@@ -25,3 +25,14 @@ cpuVendor:
 	mov rsp, rbp
 	pop rbp
 	ret
+
+getKey:
+	push rbp
+  	mov rbp, rsp
+  	mov rax, 0
+
+  	in al, 0x60
+ 	movzx eax, al    
+  	mov rsp, rbp
+  	pop rbp
+  	ret

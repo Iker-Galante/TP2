@@ -49,26 +49,28 @@ VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
 #define MAX_LINES VBE_mode_info->height / CHAR_HEIGHT
 #define MAX_COLUMNS VBE_mode_info->width / CHAR_WIDTH - 1
 
-void putPixel(char r, char g, char b, int x, int y) {
-    char * videoPtr = (char *) ((uint64_t)VBE_mode_info->framebuffer);
-    int offset = y * VBE_mode_info->pitch + x * (VBE_mode_info->bpp / 8);
-    videoPtr[offset] = b;
-    videoPtr[offset+1] = g;
-    videoPtr[offset+2] = r;
+
+
+void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
+    uint8_t * framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
+    uint64_t offset = (x * ((VBE_mode_info->bpp)/8)) + (y * VBE_mode_info->pitch);
+    framebuffer[offset]     =  (hexColor) & 0xFF;
+    framebuffer[offset+1]   =  (hexColor >> 8) & 0xFF; 
+    framebuffer[offset+2]   =  (hexColor >> 16) & 0xFF;
 }
 
 void drawWhiteLine() {
     for(int i = 0; i < VBE_mode_info->width * (VBE_mode_info->bpp / 8); i++) {
-        putPixel(0xff, 0xff, 0xff, i, 3);
-        putPixel(0xff, 0xff, 0xff, i, 4);
-        putPixel(0xff, 0xff, 0xff, i, 5);
+        putPixel(0xffffff, i, 3);
+        putPixel(0xffffff, i, 4);
+        putPixel(0xffffff, i, 5);
     }
 }
 
-void drawRect(int x, int y, int width, int height, int color) {
+void drawRectangle(int x, int y, int width, int height, int color) {
 	for (int i = y; i < y + height; i++) {
 		for (int j = x; j < x + width; j++) {
-			putPixel(color >> 16, color >> 8, color, j, i);
+			putPixel(color,j, i);
 		}
 	}
 }
@@ -143,146 +145,3 @@ void printChar(char c, int x, int y, Color color) {
 		charMap++;
 	}
 }
-
-/* void printStr(char * string, int x, int y) {
-	int line = 0;
-	int i = 0, j = 0;
-	while (string[i] != 0) {
-		printChar(string[i], x + j * CHAR_WIDTH, y + line * CHAR_HEIGHT);
-		i++; j++;
-		if (x + j * CHAR_WIDTH > VBE_mode_info->width - 9) {
-			line++;
-			j = 0;
-		}
-	}
-} */
-
-/*
-unsigned int strlen(char * str) {
-    unsigned int i = 0;
-    while (str[i] != 0) {
-        i++;
-    }
-    return i;
-}
-
-void printStringPlace(char * string, int x, int y, Color color) {
-	int i = 0;
-	int oldColumn = column;
-	int oldLine = line;
-	column = x / CHAR_WIDTH;
-	line = y / CHAR_HEIGHT;
-	while (string[i] != 0) {
-		printChar(string[i], x + i * CHAR_WIDTH, y, color);
-		i++;
-	}
-	column = oldColumn;
-	line = oldLine;
-}
-
-
-void printString(char * string) {
-	printStringN(string, strlen(string));
-}
-
-void printStringN(char * string, uint64_t length) {
-	printStringNColor(string, length, WHITE);
-}
-
-void printStringColor(char * string, Color color) {
-	printStringNColor(string, strlen(string), color);
-}
-
-void printStringNColor(char * string, uint64_t length, Color color) {
-	int i = 0;
-	eraseCursor();
-	while (string[i] != 0 && length > 0) {
-		if (string[i] == '\n') {
-			line++;
-			column = 0;
-		} else {
-			column++;
-			printChar(string[i], column * CHAR_WIDTH, line * CHAR_HEIGHT, color);
-			if (column >= MAX_COLUMNS - 1) {
-				line++;
-				column = 0;
-			}
-		}
-		if (line >= MAX_LINES) {
-			moveOneLineUp();
-		}
-		i++;
-		length--;
-	}
-	moveCursor();
-}
-
-
-void printLn(char * string) {
-	printString(string);
-	line++;
-	column = 0;
-	if (line >= MAX_LINES) {
-		moveOneLineUp();
-	}
-	moveCursor();
-}
-
-void moveOneLineUp() {
-	char * dst = (char *) (uint64_t)(VBE_mode_info->framebuffer);
-	char * src = dst + VBE_mode_info->pitch * CHAR_HEIGHT;
-	memcpy(dst, src, VBE_mode_info->pitch * (VBE_mode_info->height - CHAR_HEIGHT));
-	memset((void *) (uint64_t)(VBE_mode_info->framebuffer + VBE_mode_info->pitch * (VBE_mode_info->height - CHAR_HEIGHT)), 0, VBE_mode_info->pitch * CHAR_HEIGHT);
-	line--;
-}
-
-void moveCursor() {
-	if (showCursor) {
-		for (int i = line * CHAR_HEIGHT; i < (line + 1) * CHAR_HEIGHT; i++) {
-			for (int j = (column + 1) * CHAR_WIDTH; j < (column + 2) * CHAR_WIDTH; j++) {
-				putPixel(0xff, 0xff, 0xff, j, i);
-			}
-		}
-	}
-}
-
-void eraseCursor() {
-	if (showCursor) {
-		for (int i = line * CHAR_HEIGHT; i < (line + 1) * CHAR_HEIGHT; i++) {
-			for (int j = (column + 1) * CHAR_WIDTH; j < (column + 2) * CHAR_WIDTH; j++) {
-				putPixel(0, 0, 0, j, i);
-			}
-		}
-	}
-}
-
-void clearScreen() {
-	memset((void *) (uint64_t)(VBE_mode_info->framebuffer), 0, VBE_mode_info->pitch * VBE_mode_info->height);
-	line = 1;
-	column = 0;
-	moveCursor();
-}
-
-uint16_t getHeight() {
-	return VBE_mode_info->height;
-}
-
-uint16_t getWidth() {
-	return VBE_mode_info->width;
-}
-
-void toggleCursor() {
-	if (showCursor)
-		eraseCursor();
-	showCursor = !showCursor;
-}
-
-void drawImage(const unsigned long int * image, int width, int height) {
-	for (int i = 0, o = 100; i < height; i++, o += 5) {
-		for (int j = 0, k = 230; j < width; j++, k += 5) {
-			drawRect(k, o, 5, 5, image[i * width + j]);
-		}
-	}
-}
-
-/*
