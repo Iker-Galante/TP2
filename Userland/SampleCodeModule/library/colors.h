@@ -1,6 +1,6 @@
 #ifndef __DEFINES_H__
 #define __DEFINES_H__
-
+//(RGB)
 #define RED 0xFF0000
 #define GREEN 0x00FF00
 #define BLUE 0x0000FF
