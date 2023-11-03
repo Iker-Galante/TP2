@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include <font.h>
-#include <videodriver.h>
+#include "videoDriver.h"
 #include <lib.h>
 
 struct vbe_mode_info_structure {
@@ -49,7 +49,15 @@ VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
 #define MAX_LINES VBE_mode_info->height / CHAR_HEIGHT
 #define MAX_COLUMNS VBE_mode_info->width / CHAR_WIDTH - 1
 
+uint32_t size = DEFAULT_FONT_SIZE;
 
+void setFontSize(uint32_t new_font_size){
+	size = new_font_size;
+}
+
+uint32_t getFontSize(){
+	return size;
+}
 
 void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
     uint8_t * framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
