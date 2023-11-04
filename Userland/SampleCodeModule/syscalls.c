@@ -2,6 +2,10 @@
 //Debo castear a uint64_t los parametros para que no se rompa el stack
 extern uint64_t sys_call(uint64_t rax, uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t , uint64_t);
 
+uint64_t sys_read(unsigned int fd, char * buffer, unsigned int size){
+    return sys_call((uint64_t) 0, (uint64_t) fd, (uint64_t) buffer, (uint64_t) size, (uint64_t) 0, (uint64_t) 0);    
+}
+    
 uint64_t sys_print(unsigned int fd, char* buffer, unsigned int size) {
     return sys_call((uint64_t) 1, (uint64_t) fd, (uint64_t) buffer, (uint64_t) size, (uint64_t) 0, (uint64_t) 0);
 }

@@ -4,5 +4,5 @@
 uint64_t sys_print(unsigned int fd,char* buffer,unsigned int size);
 uint64_t sys_print_color(unsigned int fd,char* buffer,unsigned int size,uint64_t color);
 uint64_t sys_clean_screen();
-
+uint64_t sys_read(unsigned int fd, char* buffer, unsigned int size);
 #endif

@@ -4,7 +4,7 @@
 #include<colors.h>
 
 int main() {
-	print("Bienvendio a la consola del SO!, por favor ingrese s/t entre Snake y Terminal \n \n");
+	print("Bienvenido a la consola del SO!, por favor ingrese s/t entre Snake y Terminal \n \n");
 	unsigned char c;
 	do{
 		c=getchar();
