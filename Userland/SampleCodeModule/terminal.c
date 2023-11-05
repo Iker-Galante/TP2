@@ -71,13 +71,13 @@ void analizeBuffer(char *buffer, int count) {
             printWithColor(commandsList[i], RED);
         }
     } else if (commandMatch(buffer, "time", count)) {
-        printf("\n\nTiempo del SO ", RED);
+        printf("\n\nHora del SO ", RED);
         printf("%s\n",getTime());
     } else if (commandMatch(buffer, "date", count)) {
         printf("\n\nFecha del SO ");
         printf("%s\n", getDate());
     } else if (commandMatch(buffer, "registers", count)) {
-        printRegs();
+        printRegisters();
     } else if (commandMatch(buffer, "fillregisters", count)) {
         fillRegisters();
     } else if (commandMatch(buffer, "clear", count)) {

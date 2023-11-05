@@ -10,3 +10,7 @@ void printf(char* str,...);
 void numToString(int num, char* str);
 void intToHexa(uint64_t hexa, char* v);
 void printCharWithColor(char c, uint64_t color);
+char* getTime();
+char* getDate();
+void printRegisters();
+void fillRegisters();

@@ -22,3 +22,12 @@ uint64_t sys_print_color(unsigned int fd,  char* buffer, unsigned int size, uint
 uint64_t sys_clean_screen(){
     return sys_call((uint64_t)6, (uint64_t)0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0);
 }
+uint64_t sys_time(char *buffer){
+    return sys_call((uint64_t)4, (uint64_t)buffer, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0);
+}
+uint64_t sys_date(char* buffer){
+     return sys_call((uint64_t)5, (uint64_t)buffer, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0);
+}
+uint64_t sys_registers(uint64_t * registerBuffer){
+    return sys_call((uint64_t) 3, (uint64_t) registerBuffer, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0);
+}

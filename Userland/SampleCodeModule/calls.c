@@ -89,6 +89,31 @@ void printCharWithColor(char c, uint64_t color){
     char v[]={c};
     sys_print_color(1,v,1,color);
 }
+char* getTime(){
+    char bufferTime[9];
+	sys_time(bufferTime);
+	return bufferTime;
+}
+char* getDate(){
+    char bufferDate[9];
+	sys_date(bufferDate);
+	return bufferDate;
+}
+void printRegisters(){
+    uint64_t regs[17];
+    char * regsnames[] = {"rax ", "rbx ", "rcx ", "rdx ", "rsi ", "rdi ", "rbp ", "rsp ", "r8  ", "r9  ", "r10 ", "r11 ", "r12 ",
+        "r13 ", "r14 ", "r15 ", "rip "};
+    print("\n\n");
+    sys_registers(regs);
+    for (int i = 0; i < 17; i++) {
+        char hex[17];
+        intToHexa(regs[i], hex);
+        printf("%s 0x%s\n", regsnames[i], hex);
+    }
+}
+void fillRegisters(){
+    //SEGUIR
+}
 void printf(char* format,...){ //Funcion de prinf con funcionamiento como stdio
     va_list args;
     va_start(args, format);
@@ -107,7 +132,7 @@ void printf(char* format,...){ //Funcion de prinf con funcionamiento como stdio
                 case 'x': {
                     int num = va_arg(args, int);
                     char str[9];
-                    intToHex(num, str);
+                    intToHexa(num, str);
                     printWithColor(str, WHITE);
                     break;
                 }
