@@ -68,7 +68,7 @@ void analizeBuffer(char *buffer, int count) {
     if (commandMatch(buffer, "help", count) /*|| commandMatch(buffer, "HELP", count)*/) {
         print("\n\nComandos disponibles:\n\n");
         for (int i = 0; i < COMMANDSQUANTITY; i++) {
-            printWithColor(commands[i], RED);
+            printWithColor(commandsList[i], RED);
         }
     } else if (commandMatch(buffer, "time", count)) {
         printf("\n\nTiempo del SO ", RED);
