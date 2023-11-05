@@ -183,6 +183,30 @@ void printStringColor(char * string, Color color) {
 	printStringNColor(string, strlen(string), color);
 }
 
+void printStringNColor(char * string, uint64_t length, Color color) {
+	int i = 0;
+	eraseCursor();
+	while (string[i] != 0 && length > 0) {
+		if (string[i] == '\n') {
+			line++;
+			column = 0;
+		} else {
+			column++;
+			printChar(string[i], column * CHAR_WIDTH, line * CHAR_HEIGHT, color);
+			if (column >= MAX_COLUMNS - 1) {
+				line++;
+				column = 0;
+			}
+		}
+		if (line >= MAX_LINES) {
+			moveOneLineUp();
+		}
+		i++;
+		length--;
+	}
+	moveCursor();
+}
+
 void printLn(char * string) {
 	printString(string);
 	line++;
