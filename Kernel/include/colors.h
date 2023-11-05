@@ -1,18 +1,18 @@
 #ifndef COLORS_H
 #define COLORS_H
 
-#define RED ((Color){255, 0, 0})
-#define GREEN 0x00FF00
-#define BLUE 0x0000FF
-#define WHITE 0xFFFFFF
-#define BLACK 0x000000
-#define YELLOW 0xFFFF00
-#define ORANGE 0xFFA500
+#define RED ((Color){0xFF, 00, 00})
+#define GREEN ((Color){0x00, FF, 00})
+#define BLUE ((Color){0x00, 00, FF})
+#define WHITE ((Color){0xFF, FF, FF})
+#define BLACK ((Color){0x00, 00, 00})
+#define YELLOW ((Color){0xFF, FF, 00})
+#define ORANGE ((Color){0xFF, A5, 00})
 
-typedef struct {
-    uint8_t red;
-    uint8_t green;
-    uint8_t blue;
-} Color;
+typedef struct colors
+{
+    char r, g, b;
+}Color;
+
 
 #endif
