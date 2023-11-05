@@ -1,7 +1,7 @@
 #include <colors.h>
 
 void print(char * string);
-void printWithColor(char * string,uint64_t color);
+void printWithColor(char * string,Color color);
 char getChar();
 int strlen(char* v);
 void strcpy(char *dest, char* source);

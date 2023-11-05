@@ -78,15 +78,15 @@ void analizeBuffer(char *buffer, int count) {
         printf("%s\n", getDate());
     } else if (commandMatch(buffer, "registers", count)) {
         printRegs();
-    } else if (commandMatch(buffer, "fillregs", count)) {
+    } else if (commandMatch(buffer, "fillregisters", count)) {
         fillRegisters();
     } else if (commandMatch(buffer, "clear", count)) {
         sys_clear_screen();
     } else if (commandMatch(buffer, "snake2", count)) {
         snake2();
-    } else if (commandMatch(buffer, "div0", count)) {
+    } else if (commandMatch(buffer, "divideby0", count)) {
         divideByZero();
-    } else if (commandMatch(buffer, "invalidop", count)) {
+    } else if (commandMatch(buffer, "invalidoperation", count)) {
         invalidOpcode();
     } else if (commandMatch(buffer, "snake", count)) {
        snake();
