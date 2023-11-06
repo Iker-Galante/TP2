@@ -1,7 +1,8 @@
 #include <colors.h>
+#include <time.h>
 
-#define WIDTH 40
-#define HEIGHT 40
+#define WIDTH 70
+#define HEIGHT 70
 #define MAXDIM 200
 
 #define PIXELWIDTH (get_scrWidht() / WIDTH)
@@ -21,9 +22,18 @@
 
 static unsigned long int next = 1;
 
+
+void singlePlayerSnake();
+void mpSnake();
+
 int rand() {
-    next = next * 1103515245 + 12345;
-    return (unsigned int)(next / 65536) % 32768;
+    time_t tiempo;
+    time(&tiempo);
+    unsigned int semilla = (unsigned int)tiempo;
+    
+    // Usa la semilla para generar un número pseudoaleatorio en el rango [0, 70).
+    unsigned int numeroAleatorio = (semilla % 68) + 1;
+
 }
 
 int finish;
@@ -34,29 +44,19 @@ struct Position{
     int y;
 };
 
-struct Player{
+typedef struct Player{
     int currentX;
     int currentY;
     int alive;
     int body;
     int direction;
     int length;
-    Color color;
+    //Revisar Color color;
     struct Position position[MAXDIM];
-};
+}Player;
 
-void generateFood(char board[HEIGHT][WIDTH], int *foodX, int *foodY) {
-    do {
-        *foodX = rand() % (WIDTH - 2) + 1;
-        *foodY = rand() % (HEIGHT - 2) + 1;
-    } while (board[*foodY][*foodX] != ' ');    
 
-    board[*foodY][*foodX] = '*';
-}
 
-void eraseTail(char board[HEIGHT][WIDTH], int i, int j) {
-    board[i][j] = ' ';
-}
 
 void drawBoard(char board[HEIGHT][WIDTH], struct Player *player) {
     Color currentColor;
@@ -80,5 +80,90 @@ void drawBoard(char board[HEIGHT][WIDTH], struct Player *player) {
             // Dibuja un rectángulo en la posición actual con el color correspondiente
             drawRectangle(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
         }
+    }
+
+}
+
+void createFood(char snake[HEIGHT][WIDTH], int *foodPosX, int *foodPosY){
+    do{
+        *foodPosX = rand();
+        *foodPosY = rand(); 
+    } while (snake[*foodPosY][*foodPosX] != '0');
+
+    game[*foodPosY][*foodPosX] = "#";
+}
+
+void initializeGame(char snake[HEIGHT][WIDTH], Player *player){
+    player->currentX = WIDTH/2;
+    player->currentY = HEIGHT/2;
+    player->direction = PLAYER1_LEFT;
+    player->alive = 1;
+    player->symbol = "*";
+   //revisar color player->playerColor
+    player->length = 3;
+
+    snake[player->actualY][player->actualX] = player->symbol;
+
+    int i,j;
+
+    for(i = 0; i < HEIGHT ; i++{
+        for (j = 0 ; j < WIDTH; j++){
+            snake[i][j] = '0'; //revisar falopeada de iker 
+        }
+    }
+
+    createFood(snake,&foodPosX,&foodPosY);
+}
+
+
+void playerInput(struct Player *player,char up, char down, char left, char right) {
+    char key;
+    key = getChar();
+
+    if (key == up && player->direction != down) {
+        player->direction = up;
+    } else if (key == down && player->direction != up) {
+        player->direction = down;
+    } else if (key == left && player->direction != right) {
+        player->direction = left;
+    } else if (key == right && player->direction != left) {
+        player->direction = right;
+    }
+}
+
+void eraseTail(char board[HEIGHT][WIDTH], int i, int j) {
+    board[i][j] = '0';
+}
+
+//revisar eraseTail call
+void snakeMovement(char snake[HEIGHT][WIDTH], Player *player) {
+    if (player->length >= 1) {
+        eraseTail(snake, player->position[player->length - 1].x, player->position[player->length - 1].y);
+        for (int i = player->length - 1; i > 0; i--) {
+            player->position[i] = player->position[i - 1];
+        }
+    }
+}
+
+
+////////// 1 player startup //////////
+int snake(){
+    sys_clean_screen();
+    singlePlayerSnake();
+}
+
+
+void singlePlayerSnake(){
+    char snake[HEIGHT][WIDTH];
+
+    Player player;
+
+    initializeGame(snake,&player);
+
+    int flag = 0;
+
+    while(!flag){
+        playerInput(&player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
+        snakeMovement(snake,&player);
     }
 }
