@@ -31,3 +31,9 @@ uint64_t sys_date(char* buffer){
 uint64_t sys_registers(uint64_t * registerBuffer){
     return sys_call((uint64_t) 3, (uint64_t) registerBuffer, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0);
 }
+uint64_t sys_IncreasePixel(){
+    return sys_call((uint64_t)7, (uint64_t)0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0);
+}
+uint64_t sys_DecreasePixel(){
+    return sys_call((uint64_t)8, (uint64_t)0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0);
+}

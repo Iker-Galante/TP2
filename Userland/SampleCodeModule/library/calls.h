@@ -14,3 +14,5 @@ char* getTime();
 char* getDate();
 void printRegisters();
 void fillRegisters();
+void zoomIn();
+void zoomOut();

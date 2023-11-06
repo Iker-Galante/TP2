@@ -160,3 +160,9 @@ void printf(char* format,...){ //Funcion de prinf con funcionamiento como stdio
     }
     va_end(args);
 }
+void zoomIn(){
+    sys_IncreasePixel();
+}
+void zoomOut(){
+    sys_DecreasePixel();
+}

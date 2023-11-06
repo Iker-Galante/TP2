@@ -8,4 +8,6 @@ uint64_t sys_read(unsigned int fd, char* buffer, unsigned int size);
 uint64_t sys_time(char* buffer);
 uint64_t sys_date(char* buffer);
 uint64_t sys_registers(uint64_t* registerBuffer);
+uint64_t sys_IncreasePixel();
+uint64_t sys_DecreasePixel();
 #endif

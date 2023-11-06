@@ -3,9 +3,9 @@
 #include <syscalls.h>
 #include <calls.h>
 
-#define COMMANDSQUANTITY 10
+#define COMMANDSQUANTITY 12
 
-static char* commands[]={"help","time","date","registers","fillregisters","divideby0","invalidoperation","snake","snake2","clear"};
+static char* commands[]={"help","time","date","registers","fillregisters","divideby0","invalidoperation","snake","snake2","clear","zoomin","zoomout"};
 static char* commandsList={
     "\thelp: Muestra una lista de comandos posibles\n",
 	"\ttime: Imprime la hora del SO\n",
@@ -90,7 +90,11 @@ void analizeBuffer(char *buffer, int count) {
         invalidOperationCode();
     } else if (commandMatch(buffer, "snake", count)) {
        snake(); //Ver como implementar
+    } else if(commandMatch(buffer, "zoomin", count)) {
+        zoomIn();
+    } else if(commandMatch(buffer, "zoomout", count)) {
+        zoomOut();
     } else {
-        printf("\nComando no encontrado, escriba \"help\" para comandos disponibles\n");
+        printf("\nComando no encontrado, escriba \"help\" para ver lista de comandos disponibles\n");
     }
 }
