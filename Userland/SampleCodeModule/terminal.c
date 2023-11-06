@@ -81,15 +81,15 @@ void analizeBuffer(char *buffer, int count) {
     } else if (commandMatch(buffer, "fillregisters", count)) {
         fillRegisters();
     } else if (commandMatch(buffer, "clear", count)) {
-        sys_clear_screen();
+        sys_clean_screen();
     } else if (commandMatch(buffer, "snake2", count)) {
-        snake2();
+        snake2(); //Ver como implementar
     } else if (commandMatch(buffer, "divideby0", count)) {
-        divideByZero();
+        divbyZero();
     } else if (commandMatch(buffer, "invalidoperation", count)) {
-        invalidOpcode();
+        invalidOperationCode();
     } else if (commandMatch(buffer, "snake", count)) {
-       snake();
+       snake(); //Ver como implementar
     } else {
         printf("\nComando no encontrado, escriba \"help\" para comandos disponibles\n");
     }
