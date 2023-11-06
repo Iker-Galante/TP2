@@ -5,6 +5,8 @@
 #include <stdarg.h>
 #define WHITE 0xFFFFFF
 
+extern void fillRegis();
+
 void print(char * cadena){
     sys_print(1,cadena,strlen(cadena));
 }
@@ -112,7 +114,8 @@ void printRegisters(){
     }
 }
 void fillRegisters(){
-    //SEGUIR
+    print("\n\n Cargando los registros, pulse \"g\" para guardar su valor\n");
+    fillRegis();
 }
 void printf(char* format,...){ //Funcion de prinf con funcionamiento como stdio
     va_list args;

@@ -2,11 +2,11 @@ GLOBAL invalidOperation
 GLOBAL divByZero
 GLOBAL fillRegisters
 
-invalidOperation:
+invalidOperationCode:
     mov ex6, rax
     ret
 
-divByZero:
+divbyZero:
     mov rax, 5
     mov ebx, 0
     div ebx
@@ -48,7 +48,7 @@ divByZero:
 	pop rax
 %endmacro
 
-fillRegisters:
+fillRegis:
     pushState
     mov rax, 0xFFFFFFFF
     mov rbx, 0xFF000000
