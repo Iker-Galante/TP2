@@ -42,16 +42,10 @@ void syscallHandler(uint64_t id, uint64_t arg0, uint64_t arg1, uint64_t arg2, ui
             sys_play_sound(arg0, arg1, arg2);
             break;
         case 9:
-            sys_get_screensize(arg0, arg1);
-            break;
-        case 10:
             sys_toggle_cursor();
             break;
-        case 11:
+        case 10:
             sys_get_ticks(arg0);
-            break;
-        case 12:
-            sys_write_place(arg0, arg1, arg2, arg3, arg4);
             break;
     }
     
@@ -79,13 +73,6 @@ static void sys_print(uint64_t fd, uint64_t buffer, uint64_t length) {
     }
 }
 
-static void sys_write_place(uint64_t fd, uint64_t buffer, uint64_t length, uint64_t x, uint64_t y) {
-    if (fd == STDOUT) {
-        printStringPlace((char *) buffer, (int) x, (int) y, WHITE);
-    } else if (fd == STDERR) {
-        printStringPlace((char *) buffer, (int) x, (int) y, RED);
-    }
-}
 
 static void sys_print_color(uint64_t fd, uint64_t buffer, uint64_t length, uint64_t color) {
     if (fd == STDOUT || fd == STDERR) {
@@ -123,12 +110,6 @@ static void sys_play_sound(uint64_t freq, uint64_t duration, uint64_t waitAfter)
     playNoteSound((int) freq, (int) duration, (int) waitAfter);
 }
 
-static void sys_get_screensize(uint64_t width, uint64_t height) {
-    uint16_t * w = (uint16_t *) width;
-    uint16_t * h = (uint16_t *) height;
-    *w = getWidth();
-    *h = getHeight();
-}
 
 static void sys_toggle_cursor() {
     toggleCursor();
