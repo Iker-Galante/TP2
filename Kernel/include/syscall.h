@@ -11,8 +11,6 @@ static void sys_print(uint64_t fd, uint64_t buffer, uint64_t length);
 
 static void sys_print_color(uint64_t fd, uint64_t buffer, uint64_t length, uint64_t color);
 
-static void sys_write_place(uint64_t fd, uint64_t buffer, uint64_t length, uint64_t x, uint64_t y) ;
-
 static void sys_get_registers(uint64_t regsBuff);
 
 static void sys_get_time(uint64_t buffer);
@@ -25,12 +23,8 @@ static void sys_draw_rectangle(uint64_t x, uint64_t y, uint64_t width, uint64_t 
 
 static void sys_play_sound(uint64_t freq, uint64_t duration, uint64_t waitAfter);
 
-static void sys_get_screensize(uint64_t width, uint64_t height);
-
 static void sys_toggle_cursor();
 
 static void sys_get_ticks(uint64_t ticks);
-
-static void sys_draw_image(uint64_t image, uint64_t width, uint64_t height);
 
 #endif
