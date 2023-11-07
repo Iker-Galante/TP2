@@ -7,7 +7,7 @@ int main() {
 	print("Bienvenido a la consola del SO!, por favor ingrese s/t entre Snake y Terminal \n \n");
 	unsigned char c;
 	do{
-		c=getchar();
+		c=getChar();
 	}while(c!='s' && c!='t');
 	if(c=='s')
 		snake();

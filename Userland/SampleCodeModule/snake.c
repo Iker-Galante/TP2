@@ -3,6 +3,7 @@
 #include <syscalls.h>
 #include <colors.h>
 #include <calls.h>
+#include <drawings.h>
 #define WIDTH 70
 #define HEIGHT 70
 #define MAXDIM 200
@@ -54,7 +55,7 @@ typedef struct Player{
     char body;
     int direction;
     int length;
-    uint64_t playerColor; //Ver pq entra a kernel y no a userland reviasar los colores
+    uint64_t playerColor;
     struct Position position[MAXDIM];
 }Player;
 
@@ -80,8 +81,8 @@ void drawBoard(char board[HEIGHT][WIDTH], Player *player) {
             else if (board[i][j] == '*') {
             currentColor = RED;
             }
-            // Dibuja un rectángulo en la posición actual con el color correspondiente
-            //drawRectangle(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
+            // Dibuja en la posición actual con el color correspondiente
+            drawBox(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
         }
     }
 
@@ -102,7 +103,7 @@ void initializeGame(char snake[HEIGHT][WIDTH], Player *player){
     player->direction = PLAYER1_UP;
     player->alive = 1;
     player->body = '*';
-    player->playerColor=RED;
+    player->playerColor=BLUE;
     player->length = 3;
 
     snake[player->currentY][player->currentX] = player->body;
@@ -210,7 +211,7 @@ void initializeGameMP(char snake[HEIGHT][WIDTH], Player *player1, Player *player
     player1->playerColor= BLUE;
     player1->length = 3;
 
-    player2->currentX = 3 * WIDTH/4;
+    player2->currentX = 2 * WIDTH/4;
     player2->currentY = HEIGHT/2;
     player2->direction = PLAYER1_UP;
     player2->alive = 1;

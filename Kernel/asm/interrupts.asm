@@ -70,7 +70,16 @@ SECTION .text
 	iretq
 %endmacro
 
-
+save_og_regs:
+	mov [ogRegs+8*1], rbx
+	mov [ogRegs+8*2], rbp
+	mov [ogRegs+8*3], r12
+	mov [ogRegs+8*4], r13
+	mov [ogRegs+8*5], r15
+	mov [ogRegs+8*6], rsp	 ; RSP
+	mov rax, [rsp]   		 ; RSP contains the return adress, so we get the RIP
+	mov [ogRegs+8*7], rax
+	ret
 
 %macro exceptionHandler 1
 	pushState
@@ -152,3 +161,6 @@ haltcpu:
 
 SECTION .bss
 	aux resq 1
+	registers resq 17 ; registers for screenshot
+	excepRegs resq 18 ; registers for exceptions
+	ogRegs resq 17		;Vector for original registers

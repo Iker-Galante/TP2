@@ -17,7 +17,7 @@ static void * const sampleCodeModuleAddress = (void*)0x400000;
 static void * const sampleDataModuleAddress = (void*)0x500000;
 
 typedef int (*EntryPoint)();
-
+extern void save_og_regs();
 
 void clearBSS(void * bssAddress, uint64_t bssSize)
 {
@@ -82,6 +82,8 @@ void * initializeKernelBinary()
 
 int main(){
 load_idt();
+save_og_regs();
 ((EntryPoint)sampleCodeModuleAddress)(); //Llamo a la direccion del sampleCodeModule
+
 return 0;
 }
