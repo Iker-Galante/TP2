@@ -22,4 +22,9 @@
 #define ACS_STACK       (ACS_PRESENT | ACS_DSEG | ACS_WRITE)
 
 
+// File descriptors
+#define STDIN  0
+#define STDOUT 1
+#define STDERR 2
+
 #endif

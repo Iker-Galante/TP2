@@ -114,7 +114,7 @@ void printRegisters(){
     }
 }
 void fillRegisters(){
-    print("\n\n Cargando los registros, pulse \"g\" para guardar su valor\n");
+    print("\n\n Cargando los registros, pulse \"CTRL\" para guardar su valor\n");
     fillRegis();
 }
 void printf(char* format,...){ //Funcion de prinf con funcionamiento como stdio
