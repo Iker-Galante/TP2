@@ -9,7 +9,8 @@
 
 
 //revisa esto iker, fijate que algunas del userspace no se usan aca,
-// y si cambiar syswrite por print
+// y si cambiar syswrite por print 
+//Ver nombres de func y cambiarlos para adecaurlos a los de userland
 extern const uint64_t registers[17];
 
 void syscallHandler(uint64_t id, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5) {
@@ -18,10 +19,10 @@ void syscallHandler(uint64_t id, uint64_t arg0, uint64_t arg1, uint64_t arg2, ui
             sys_read(arg0, arg1, arg2);
             break;
         case 1:
-            sys_write(arg0, arg1, arg2);
+            sys_print(arg0, arg1, arg2);
             break;
         case 2:
-            sys_write_color(arg0, arg1, arg2, arg3);
+            sys_print_color(arg0, arg1, arg2, arg3);
             break;
         case 3:
             sys_get_registers(arg0);
@@ -74,7 +75,7 @@ static int64_t sys_read(uint64_t fd, uint64_t buffer, uint64_t length) {
     return i;
 }
 
-static void sys_write(uint64_t fd, uint64_t buffer, uint64_t length) {
+static void sys_print(uint64_t fd, uint64_t buffer, uint64_t length) {
     if (fd == STDOUT) {
         printStringN((char *) buffer, length);
     } else if (fd == STDERR) {
@@ -90,7 +91,7 @@ static void sys_write_place(uint64_t fd, uint64_t buffer, uint64_t length, uint6
     }
 }
 
-static void sys_write_color(uint64_t fd, uint64_t buffer, uint64_t length, uint64_t color) {
+static void sys_print_color(uint64_t fd, uint64_t buffer, uint64_t length, uint64_t color) {
     if (fd == STDOUT || fd == STDERR) {
         Color c;
         c.r = (char) color;

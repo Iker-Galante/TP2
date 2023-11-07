@@ -7,9 +7,9 @@ void syscallHandler(uint64_t id, uint64_t arg0, uint64_t arg1, uint64_t arg2, ui
 
 static int64_t sys_read(uint64_t fd, uint64_t buffer, uint64_t length);
 
-static void sys_write(uint64_t fd, uint64_t buffer, uint64_t length);
+static void sys_print(uint64_t fd, uint64_t buffer, uint64_t length);
 
-static void sys_write_color(uint64_t fd, uint64_t buffer, uint64_t length, uint64_t color);
+static void sys_print_color(uint64_t fd, uint64_t buffer, uint64_t length, uint64_t color);
 
 static void sys_write_place(uint64_t fd, uint64_t buffer, uint64_t length, uint64_t x, uint64_t y) ;
 
