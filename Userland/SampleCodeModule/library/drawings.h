@@ -2,7 +2,7 @@
 #define DRAWINGS_H
 #include <stdint.h>
 
-void drawBox(int x, int y, int width, int height, uint64_t color);
+void drawBox(int x, int y, int x2, int y2, uint64_t color);
 
 
 #endif

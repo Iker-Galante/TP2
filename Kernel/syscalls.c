@@ -39,12 +39,18 @@ void syscallHandler(uint64_t id, uint64_t arg0, uint64_t arg1, uint64_t arg2, ui
             sys_draw_rectangle(arg0, arg1, arg2, arg3, arg4);
             break;
         case 8:
-            sys_play_sound(arg0, arg1, arg2);
+            sys_DecreasePixel();
             break;
         case 9:
+            sys_IncreasePixel();
+            break;
+        case ....:
+            sys_play_sound(arg0, arg1, arg2);
+            break;
+        case ....:
             sys_toggle_cursor();
             break;
-        case 10:
+        case ....:
             sys_get_ticks(arg0);
             break;
     }
@@ -52,7 +58,7 @@ void syscallHandler(uint64_t id, uint64_t arg0, uint64_t arg1, uint64_t arg2, ui
 }
 
 
-static int64_t sys_read(uint64_t fd, uint64_t buffer, uint64_t length) {
+static uint64_t sys_read(uint64_t fd, uint64_t buffer, uint64_t length) {
     if (fd != STDIN) 
         return -1;
     int i = 0;

@@ -67,17 +67,10 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
     framebuffer[offset+2]   =  (hexColor >> 16) & 0xFF;
 }
 
-void drawWhiteLine() {
-    for(int i = 0; i < VBE_mode_info->width * (VBE_mode_info->bpp / 8); i++) {
-        putPixel(0xffffff, i, 3);
-        putPixel(0xffffff, i, 4);
-        putPixel(0xffffff, i, 5);
-    }
-}
 
 void drawRectangle(int x, int y, int width, int height, int color) {
-	for (int i = y; i < y + height; i++) {
-		for (int j = x; j < x + width; j++) {
+	for (int i = y; i < height; i++) {
+		for (int j = x; j < width; j++) {
 			putPixel(color,j, i);
 		}
 	}

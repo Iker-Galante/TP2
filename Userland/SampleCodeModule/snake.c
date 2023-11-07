@@ -4,12 +4,12 @@
 #include <colors.h>
 #include <calls.h>
 #include <drawings.h>
-#define WIDTH 70
-#define HEIGHT 70
+#define WIDTH 32
+#define HEIGHT 32
 #define MAXDIM 200
 
-#define PIXELWIDTH (get_scrWidht() / WIDTH)
-#define PIXELHEIGHT (get_scrHeight() / HEIGHT)
+#define PIXELWIDTH 32
+#define PIXELHEIGHT 24
 #define MAX_BUFFER 254
 
 #define PLAYER1_UP 'w'
@@ -31,13 +31,13 @@ void mpSnake();
 
 unsigned int t1 = 0x12345678, t2 = 0x87654321;
 //utiliza una combinación de operaciones de desplazamiento y XOR para generar un número aleatorio de 32 bits.
-unsigned int random_1_to_69() {
+unsigned int random_1_to_31() {
     unsigned int b;
     b = ((t1 << 13) ^ t1) >> 19;
     t1 = ((t1 & 4294967294U) << 12) ^ b;
     b = ((t2 << 2) ^ t2) >> 25;
     t2 = ((t2 & 4294967288U) << 4) ^ b;
-    return (t1 ^ t2) % 69 + 1;
+    return (t1 ^ t2) % 31 + 1;
 }
 
 int finish;
@@ -82,7 +82,7 @@ void drawBoard(char board[HEIGHT][WIDTH], Player *player) {
             currentColor = RED;
             }
             // Dibuja en la posición actual con el color correspondiente
-            drawBox(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
+            drawBox(j*PIXELWIDTH , i * PIXELHEIGHT,(j*PIXELWIDTH)+PIXELWIDTH , (i*PIXELHEIGHT)+PIXELHEIGHT, currentColor);
         }
     }
 
@@ -90,8 +90,8 @@ void drawBoard(char board[HEIGHT][WIDTH], Player *player) {
 
 void createFood(char snake[HEIGHT][WIDTH], int *foodPosX, int *foodPosY){
     do{
-        *foodPosX = random_1_to_69();
-        *foodPosY = random_1_to_69(); 
+        *foodPosX = random_1_to_31();
+        *foodPosY = random_1_to_31(); 
     } while (snake[*foodPosY][*foodPosX] != '0');
 
     snake[*foodPosY][*foodPosX] = '#';
