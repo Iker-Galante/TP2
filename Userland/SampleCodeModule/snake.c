@@ -1,7 +1,8 @@
-#include "colors.h"
 #include <time.h>
 #include <stdint.h>
 #include <syscalls.h>
+#include <colors.h>
+#include <calls.h>
 #define WIDTH 70
 #define HEIGHT 70
 #define MAXDIM 200
@@ -53,7 +54,7 @@ typedef struct Player{
     char body;
     int direction;
     int length;
-    Color playerColor; //Ver pq entra a kernel y no a userland reviasar los colores
+    uint64_t playerColor; //Ver pq entra a kernel y no a userland reviasar los colores
     struct Position position[MAXDIM];
 }Player;
 
@@ -61,7 +62,7 @@ typedef struct Player{
 //checkear color y tema del drawrectangle
 
 void drawBoard(char board[HEIGHT][WIDTH], Player *player) {
-    Color currentColor;
+    uint64_t currentColor;
     int i, j;
     
     // Recorre las filas y columnas del tablero
@@ -98,7 +99,7 @@ void createFood(char snake[HEIGHT][WIDTH], int *foodPosX, int *foodPosY){
 void initializeGame(char snake[HEIGHT][WIDTH], Player *player){
     player->currentX = WIDTH/2; 
     player->currentY = HEIGHT/2;
-    player->direction = PLAYER1_LEFT;
+    player->direction = PLAYER1_UP;
     player->alive = 1;
     player->body = '*';
     player->playerColor=RED;
@@ -110,7 +111,7 @@ void initializeGame(char snake[HEIGHT][WIDTH], Player *player){
 
     for(i = 0; i < HEIGHT ; i++){
         for (j = 0 ; j < WIDTH; j++){
-            snake[i][j] = '0'; //revisar falopeada de iker 
+            snake[i][j] = '0'; 
         }
     }
 
@@ -160,10 +161,9 @@ void gameLogic(char snake[HEIGHT][WIDTH], Player * player, char up, char down, c
     }
 
     // check self collision
-    for (int i = 0; i < player->length; i++) {
-        if (player->currentX == player->position[i].y && player->currentY == player->position[i].x) {
+    for (int i = 0; (i < player->length) && player->alive; i++) {
+        if (player->currentX == player->position[i].y && player->currentY == player->position[i].x ) {
             player->alive = 0;
-            break;
         }
     }
     
@@ -239,7 +239,7 @@ void snakeFunctionality2(char snake[HEIGHT][WIDTH], Player *player, char up, cha
 }
 
 void drawBoard2(char board[HEIGHT][WIDTH], Player *player1, Player *player2) {
-    Color currentColor;
+    uint64_t currentColor;
     int i, j;
     
     // Recorre las filas y columnas del tablero
@@ -275,7 +275,6 @@ void snake(){
 
 void singlePlayerSnake(){
     char snake[HEIGHT][WIDTH];
-
     Player player;
 
     initializeGame(snake,&player);
@@ -290,7 +289,7 @@ void singlePlayerSnake(){
     }
     //Revisar 
    sys_clean_screen();
-   sys_print(1,"GAME OVER,Press \"e\" to exit",27);
+   print("GAME OVER,Press \"e\" to exit");
    while(getChar() != 'e');
    sys_clean_screen(); //Revisar por si hay que llamar a terminal
 }
@@ -326,7 +325,7 @@ void mpSnake(){
         // verificar si se mueve muy rapido la snake, en ese caso agregar un wait()    
     }
     sys_clean_screen();
-   sys_print(1,"GAME OVER,Press \"e\" to exit",27);
+   print("GAME OVER,Press \"e\" to exit");
    while(getChar() != 'e');
    sys_clean_screen();
 }
