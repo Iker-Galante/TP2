@@ -16,7 +16,7 @@ static char* commandsList={
 	"\tinvalidop: Ejecutar excepcion de operacion Invalida\n",
 	"\tsnake: Ejecutar el juego snake de a 1 jugador\n",
     "\tsnake2: Ejecutar el juego snake de a 2 jugadores\n",
-	"\tclear: Limpia pantalla del SO\n"
+	"\tclear: Limpia pantalla del SO\n",
     "\tzoomIn: Aumentar tamaño de letra\n",
     "\tzoomOut: Achicar tamaño de letra\n"
 };
