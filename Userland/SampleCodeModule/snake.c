@@ -56,7 +56,7 @@ typedef struct Player{
 }Player;
 
 
-
+//checkear color y tema del drawrectangle
 
 void drawBoard(char board[HEIGHT][WIDTH], Player *player) {
     //Color currentColor;
@@ -223,7 +223,7 @@ void initializeGameMP(char snake[HEIGHT][WIDTH], Player *player1, Player *player
 
     for(i = 0; i < HEIGHT ; i++){
         for (j = 0 ; j < WIDTH; j++){
-            snake[i][j] = '0'; //revisar falopeada de iker 
+            snake[i][j] = '0'; // 
         }
     }
 
