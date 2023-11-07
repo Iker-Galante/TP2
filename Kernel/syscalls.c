@@ -9,8 +9,6 @@
 #include <colores.h>
 
 
-//revisa esto iker, fijate que algunas del userspace no se usan aca,
-// y si cambiar syswrite por print 
 //Ver nombres de func y cambiarlos para adecaurlos a los de userland
 extern const uint64_t registers[17];
 
@@ -54,9 +52,6 @@ void syscallHandler(uint64_t id, uint64_t arg0, uint64_t arg1, uint64_t arg2, ui
             break;
         case 12:
             sys_write_place(arg0, arg1, arg2, arg3, arg4);
-            break;
-        case 13:
-            sys_draw_image(arg0, arg1, arg2);
             break;
     }
     
@@ -121,11 +116,11 @@ static void sys_clear_screen() {
 }
 
 static void sys_draw_rect(uint64_t x, uint64_t y, uint64_t width, uint64_t height, uint64_t color) {
-    drawRect( (int) x, (int) y, (int) width, (int) height, (int) color );
+    drawRectangle( (int) x, (int) y, (int) width, (int) height, (int) color );
 }
 
 static void sys_play_sound(uint64_t freq, uint64_t duration, uint64_t waitAfter) {
-    playNote((int) freq, (int) duration, (int) waitAfter);
+    playNoteSound((int) freq, (int) duration, (int) waitAfter);
 }
 
 static void sys_get_screensize(uint64_t width, uint64_t height) {
@@ -142,8 +137,4 @@ static void sys_toggle_cursor() {
 static void sys_get_ticks(uint64_t ticks) {
     uint32_t * t = (uint32_t *) ticks;    
     *t = ticks_elapsed();
-}
-
-static void sys_draw_image(uint64_t image, uint64_t width, uint64_t height) {
-    drawImage((const unsigned long int *) image, (int) width, (int) height);
 }
