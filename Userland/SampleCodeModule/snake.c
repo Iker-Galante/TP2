@@ -286,7 +286,7 @@ void singlePlayerSnake(){
         playerInput(&player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
         snakeMovement(snake,&player);
         snakeFunctionality(snake, &player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
-        // verificar si se mueve muy rapido la snake, en ese caso agregar un wait()
+        // verificar si se mueve muy rapido la snake, en ese caso agregar un wait(100)
     }
     //Revisar 
    sys_clean_screen();
