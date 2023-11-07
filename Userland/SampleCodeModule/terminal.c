@@ -17,8 +17,8 @@ static char* commandsList={
 	"\tsnake: Ejecutar el juego snake de a 1 jugador\n",
     "\tsnake2: Ejecutar el juego snake de a 2 jugadores\n",
 	"\tclear: Limpia pantalla del SO\n"
-    "\tzoomIn: Aumentar tamaño de letra\n";
-    "\tzoomOut: Achicar tamaño de letra\n";
+    "\tzoomIn: Aumentar tamaño de letra\n",
+    "\tzoomOut: Achicar tamaño de letra\n"
 };
 
 void terminal(){
