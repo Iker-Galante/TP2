@@ -6,6 +6,7 @@
 #include <clock.h>
 #include <sound.h>
 #include <time.h>
+#include <colores.h>
 
 
 //revisa esto iker, fijate que algunas del userspace no se usan aca,
