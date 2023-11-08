@@ -34,6 +34,15 @@ uint64_t sys_registers(uint64_t * registerBuffer){
 uint64_t sys_IncreasePixel(){
     return sys_call((uint64_t)9, (uint64_t)0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0);
 }
+
+uint64_t sys_play_sound(uint64_t freq, uint64_t duration, uint64_t wait) {
+    return sys_call((uint64_t)10, (uint64_t) freq, (uint64_t) duration, (uint64_t) wait, (uint64_t) 0, (uint64_t) 0);
+}
+
+uint64_t sys_wait(uint64_t ms){
+     return sys_call((uint64_t)11, (uint64_t) ms, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0);
+}
+
 uint64_t sys_DecreasePixel(){
     return sys_call((uint64_t)8, (uint64_t)0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0);
 }
