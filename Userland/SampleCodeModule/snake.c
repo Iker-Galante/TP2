@@ -4,6 +4,7 @@
 #include <colors.h>
 #include <calls.h>
 #include <drawings.h>
+#include <sounds.h>
 #define WIDTH 32
 #define HEIGHT 32
 #define MAXDIM 200
@@ -288,6 +289,7 @@ void singlePlayerSnake(){
         // verificar si se mueve muy rapido la snake, en ese caso agregar un wait(100)
     }
     //Revisar 
+   snakeDeadSound();
    sys_clean_screen();
    print("GAME OVER,Press \"e\" to exit");
    while(getChar() != 'e');
@@ -324,6 +326,7 @@ void mpSnake(){
         
         // verificar si se mueve muy rapido la snake, en ese caso agregar un wait()    
     }
+    snakeDeadSound();
     sys_clean_screen();
    print("GAME OVER,Press \"e\" to exit");
    while(getChar() != 'e');

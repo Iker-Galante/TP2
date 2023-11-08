@@ -48,9 +48,6 @@ void syscallHandler(uint64_t id, uint64_t arg0, uint64_t arg1, uint64_t arg2, ui
             sys_play_sound(arg0, arg1, arg2);
             break;
         case 11:
-            sys_toggle_cursor();
-            break;
-        case 12:
             sys_get_ticks(arg0);
             break;
     }
@@ -116,10 +113,6 @@ static void sys_play_sound(uint64_t freq, uint64_t duration, uint64_t waitAfter)
     playNoteSound((int) freq, (int) duration, (int) waitAfter);
 }
 
-
-static void sys_toggle_cursor() {
-    toggleCursor();
-}
 
 static void sys_get_ticks(uint64_t ticks) {
     uint32_t * t = (uint32_t *) ticks;    

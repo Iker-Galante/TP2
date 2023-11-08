@@ -11,5 +11,5 @@ uint64_t sys_registers(uint64_t* registerBuffer);
 uint64_t sys_IncreasePixel();
 uint64_t sys_DecreasePixel();
 uint64_t sys_draw_rectangle(int x, int y, int width, int height, int color);
-
+uint64_t sys_play_sound(int freq, int duration, int wait);
 #endif
