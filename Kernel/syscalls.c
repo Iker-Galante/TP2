@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <videodriver.h>
 #include <defs.h>
-#include <syscalls.h>
+#include <syscall.h>
 #include <keyboard.h>
 #include <clock.h>
 #include <sound.h>
@@ -44,13 +44,13 @@ void syscallHandler(uint64_t id, uint64_t arg0, uint64_t arg1, uint64_t arg2, ui
         case 9:
             sys_IncreasePixel();
             break;
-        case ....:
+        case 10:
             sys_play_sound(arg0, arg1, arg2);
             break;
-        case ....:
+        case 11:
             sys_toggle_cursor();
             break;
-        case ....:
+        case 12:
             sys_get_ticks(arg0);
             break;
     }

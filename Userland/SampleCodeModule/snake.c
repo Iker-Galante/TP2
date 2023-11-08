@@ -261,8 +261,7 @@ void drawBoard2(char board[HEIGHT][WIDTH], Player *player1, Player *player2) {
               currentColor = RED;
             }
             // Dibuja un rectángulo en la posición actual con el color correspondiente
-            //drawRectangle(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
-        }
+            drawBox(j*PIXELWIDTH , i * PIXELHEIGHT,(j*PIXELWIDTH)+PIXELWIDTH , (i*PIXELHEIGHT)+PIXELHEIGHT, currentColor);          }
     }
 
 }

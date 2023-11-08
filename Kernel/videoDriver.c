@@ -244,18 +244,14 @@ void eraseCursor() {
     }
 }
 
+void toggleCursor() {
+	if (showCursor)
+		eraseCursor();
+	showCursor = !showCursor;
+
 void clearScreen() {
 	memset((void *) (uint64_t)(VBE_mode_info->framebuffer), 0, VBE_mode_info->pitch * VBE_mode_info->height);
 	line = 1;
 	column = 0;
 	moveCursor();
-}
-
-
-uint16_t getHeight() {
-	return VBE_mode_info->height;
-}
-
-uint16_t getWidth() {
-	return VBE_mode_info->width;
 }
