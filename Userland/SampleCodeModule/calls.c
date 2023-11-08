@@ -1,7 +1,7 @@
-#include <colors.h>
-#include <calls.h>
+#include "include/colors.h"
+#include "include/calls.h"
 #include <stdint.h>
-#include <syscalls.h>
+#include "include/usyscalls.h"
 #include <stdarg.h>
 #define WHITE 0xFFFFFF
 

@@ -1,10 +1,10 @@
 #include <time.h>
 #include <stdint.h>
-#include <usyscalls.h>
-#include <colors.h>
-#include <calls.h>
-#include <drawings.h>
-#include <sounds.h>
+#include "include/usyscalls.h"
+#include "include/colors.h"
+#include "include/calls.h"
+#include "include/drawings.h"
+#include "include/sounds.h"
 #define WIDTH 32
 #define HEIGHT 32
 #define MAXDIM 200

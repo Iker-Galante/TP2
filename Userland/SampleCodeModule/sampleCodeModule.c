@@ -1,7 +1,7 @@
 /* sampleCodeModule.c */
 #include<stdint.h>
-#include<calls.h>
-#include<colors.h>
+#include"include/calls.h"
+#include"include/colors.h"
 
 int main() {
 	print("Bienvenido a la consola del SO!, por favor ingrese s/t entre Snake y Terminal \n \n");

@@ -12,7 +12,7 @@ GLOBAL _irq02Handler
 GLOBAL _irq03Handler
 GLOBAL _irq04Handler
 GLOBAL _irq05Handler
-GLOBAL int_80Handler
+GLOBAL _int80Handler
 
 GLOBAL _exception0Handler
 GLOBAL _exception6Handler

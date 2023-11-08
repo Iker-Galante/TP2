@@ -1,7 +1,7 @@
-#include <terminal.h>
-#include <colors.h>
-#include <usyscalls.h>
-#include <calls.h>
+#include "include/terminal.h"
+#include "include/colors.h"
+#include "include/usyscalls.h"
+#include "include/calls.h"
 
 #define COMMANDSQUANTITY 12
 
