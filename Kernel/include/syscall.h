@@ -5,7 +5,7 @@
 
 void syscallHandler(uint64_t id, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
 
-static int64_t sys_read(uint64_t fd, uint64_t buffer, uint64_t length);
+static uint64_t sys_read(uint64_t fd, uint64_t buffer, uint64_t length);
 
 static void sys_print(uint64_t fd, uint64_t buffer, uint64_t length);
 
@@ -25,4 +25,5 @@ static void sys_play_sound(uint64_t freq, uint64_t duration, uint64_t waitAfter)
 
 static void sys_get_ticks(uint64_t ticks);
 
+static void sys_wait(uint64_t ms);
 #endif

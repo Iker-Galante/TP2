@@ -6,6 +6,8 @@
 
 void keyboard_handler();
 
+char getChar();
+
 extern int getKey();
 
 

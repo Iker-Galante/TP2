@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include <videodriver.h>
+#include <videoDriver.h>
 #include <defs.h>
 #include <syscall.h>
 #include <keyboard.h>
@@ -39,15 +39,9 @@ void syscallHandler(uint64_t id, uint64_t arg0, uint64_t arg1, uint64_t arg2, ui
             sys_draw_rectangle(arg0, arg1, arg2, arg3, arg4);
             break;
         case 8:
-            sys_DecreasePixel();
-            break;
-        case 9:
-            sys_IncreasePixel();
-            break;
-        case 10:
             sys_play_sound(arg0, arg1, arg2);
             break;
-        case 11:
+        case 9:
             sys_wait(arg0);
             break;
     }
@@ -105,7 +99,7 @@ static void sys_clear_screen() {
     clearScreen();
 }
 
-static void sys_draw_rect(uint64_t x, uint64_t y, uint64_t width, uint64_t height, uint64_t color) {
+static void sys_draw_rectangle(uint64_t x, uint64_t y, uint64_t width, uint64_t height, uint64_t color) {
     drawRectangle( (int) x, (int) y, (int) width, (int) height, (int) color );
 }
 
@@ -121,11 +115,9 @@ static void sys_get_ticks(uint64_t ticks) {
 
 
 static void sys_wait(uint64_t ms){
-    int ms_elapsed() {
-    return ticks*5000/91;
-}
+
     if (ms > 0){
-        int start_ms = ms_elapsed();
-        do { _hlt(); } while (ms_elapsed() - start_ms < ms);
+        int start_ms = ticks_elapsed();
+        do { _hlt(); } while (ticks_elapsed() - start_ms < ms);
     }
 }

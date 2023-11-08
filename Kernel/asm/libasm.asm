@@ -1,4 +1,8 @@
-GLOBAL cpuVendor
+GLOBAL cpuVendor 
+GLOBAL getKey
+GLOBAL clock
+GLOBAL inb
+GLOBAL outb
 
 section .text
 	
@@ -26,18 +30,19 @@ cpuVendor:
 	pop rbp
 	ret
 
+
 getKey:
 	push rbp
-  	mov rbp, rsp
-  	mov rax, 0
+	mov rbp, rsp
 
-  	in al, 0x60
- 	movzx eax, al    
-  	mov rsp, rbp
-  	pop rbp
-  	ret
+	in al, 0x60
 
-	; Start Clock
+	mov rsp, rbp
+	pop rbp
+	ret
+
+
+; Start Clock
 
 clock:
 	push rbp

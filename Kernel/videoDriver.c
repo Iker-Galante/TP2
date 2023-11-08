@@ -113,7 +113,7 @@ void printChar(char c, int x, int y, Color color) {
                 printChar(' ', x, y, color);
                 x += CHAR_WIDTH;
             }
-        }1
+        }
     } else {
         // Print a regular character
         if (c < FIRST_CHAR || c > LAST_CHAR)
@@ -124,7 +124,7 @@ void printChar(char c, int x, int y, Color color) {
             char mask = 0b10000000;
             for (int j = 0; j < CHAR_WIDTH; j++) {
                 if (*charMap & mask) {
-                    putPixel(color, x + j, y + i);
+                    putPixel(((uint32_t)color.r << 16) | ((uint32_t)color.g << 8) | color.b, x + j, y + i);
                 }
                 mask >>= 1;
             }
@@ -162,6 +162,28 @@ void printStringPlace(char * string, int x, int y, Color color) {
 	column = oldColumn;
 	line = oldLine;
 }
+void moveCursor() {
+    if (showCursor) {
+        uint32_t cursorColor = 0xFFFFFF;  // White color in hexadecimal (0xFFFFFF)
+        for (uint64_t i = line * CHAR_HEIGHT; i < (line + 1) * CHAR_HEIGHT; i++) {
+            for (uint64_t j = (column + 1) * CHAR_WIDTH; j < (column + 2) * CHAR_WIDTH; j++) {
+                putPixel(cursorColor, j, i);
+            }
+        }
+    }
+}
+
+void eraseCursor() {
+    if (showCursor) {
+        uint32_t bgColor = 0x000000;  // Black color in hexadecimal (0x000000)
+        for (uint64_t i = line * CHAR_HEIGHT; i < (line + 1) * CHAR_HEIGHT; i++) {
+            for (uint64_t j = (column + 1) * CHAR_WIDTH; j < (column + 2) * CHAR_WIDTH; j++) {
+                putPixel(bgColor, j, i);
+            }
+        }
+    }
+}
+
 
 
 void printString(char * string) {
@@ -225,3 +247,4 @@ void clearScreen() {
 	column = 0;
 	moveCursor();
 }
+
