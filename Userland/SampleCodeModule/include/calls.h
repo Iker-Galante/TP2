@@ -9,7 +9,7 @@ void strcpy(char *dest, char* source);
 void printChar(char c);
 void printf(char* str,...);
 void numToString(int num, char* str);
-void intToHexa(int num, char* hexa);
+void intToHexa(uint64_t num, char* hexa);
 void printCharWithColor(char c, uint64_t color);
 char* getTime();
 char* getDate();
