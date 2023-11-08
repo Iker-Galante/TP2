@@ -23,8 +23,6 @@ static void sys_draw_rectangle(uint64_t x, uint64_t y, uint64_t width, uint64_t 
 
 static void sys_play_sound(uint64_t freq, uint64_t duration, uint64_t waitAfter);
 
-static void sys_toggle_cursor();
-
 static void sys_get_ticks(uint64_t ticks);
 
 #endif

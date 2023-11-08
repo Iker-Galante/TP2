@@ -113,7 +113,7 @@ void printChar(char c, int x, int y, Color color) {
                 printChar(' ', x, y, color);
                 x += CHAR_WIDTH;
             }
-        }
+        }1
     } else {
         // Print a regular character
         if (c < FIRST_CHAR || c > LAST_CHAR)
@@ -124,7 +124,7 @@ void printChar(char c, int x, int y, Color color) {
             char mask = 0b10000000;
             for (int j = 0; j < CHAR_WIDTH; j++) {
                 if (*charMap & mask) {
-                    putPixel((color.r << 16) | (color.g << 8) | color.b, x + j, y + i);
+                    putPixel(color, x + j, y + i);
                 }
                 mask >>= 1;
             }
@@ -218,36 +218,6 @@ void moveOneLineUp() {
 	line--;
 }
 
-void moveCursor() {
-    if (showCursor) {
-        // White color for the cursor
-        uint32_t cursorColor = 0xFFFFFF;
-
-        for (int i = line * CHAR_HEIGHT; i < (line + 1) * CHAR_HEIGHT; i++) {
-            for (int j = (column + 1) * CHAR_WIDTH; j < (column + 2) * CHAR_WIDTH; j++) {
-                putPixel(cursorColor, j, i);
-            }
-        }
-    }
-}
-
-void eraseCursor() {
-    if (showCursor) {
-        // Black color to erase the cursor
-        uint32_t blackColor = 0x000000;
-
-        for (int i = line * CHAR_HEIGHT; i < (line + 1) * CHAR_HEIGHT; i++) {
-            for (int j = (column + 1) * CHAR_WIDTH; j < (column + 2) * CHAR_WIDTH; j++) {
-                putPixel(blackColor, j, i);
-            }
-        }
-    }
-}
-
-void toggleCursor() {
-	if (showCursor)
-		eraseCursor();
-	showCursor = !showCursor;
 
 void clearScreen() {
 	memset((void *) (uint64_t)(VBE_mode_info->framebuffer), 0, VBE_mode_info->pitch * VBE_mode_info->height);

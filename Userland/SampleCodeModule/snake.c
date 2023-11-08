@@ -286,7 +286,7 @@ void singlePlayerSnake(){
         playerInput(&player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
         snakeMovement(snake,&player);
         snakeFunctionality(snake, &player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
-        // verificar si se mueve muy rapido la snake, en ese caso agregar un wait(100)
+        wait(100);// verificar si se mueve muy rapido la snake, en ese caso agregar un wait(100)
     }
     //Revisar 
    snakeDeadSound();
@@ -323,7 +323,7 @@ void mpSnake(){
         snakeFunctionality2(snake, &player2,PLAYER2_UP,PLAYER2_DOWN,PLAYER2_LEFT,PLAYER2_RIGHT);
         
         drawBoard2(snake, &player1, &player2);
-        
+        wait(100);
         // verificar si se mueve muy rapido la snake, en ese caso agregar un wait()    
     }
     snakeDeadSound();

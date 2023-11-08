@@ -1,5 +1,5 @@
 #include <sounds.h>
-#include <usyscalls.h.>
+#include <usyscalls.h>
 #include <calls.h>
 
 void playNote(int freq, int duration, int wait){
