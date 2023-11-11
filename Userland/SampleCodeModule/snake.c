@@ -1,10 +1,10 @@
 #include <time.h>
 #include <stdint.h>
-#include "include/usyscalls.h"
-#include "include/colors.h"
-#include "include/calls.h"
-#include "include/drawings.h"
-#include "include/sounds.h"
+#include <usyscalls.h>
+#include <colors.h>
+#include <calls.h>
+#include <drawings.h>
+#include <sounds.h>
 #define WIDTH 32
 #define HEIGHT 32
 #define MAXDIM 200
@@ -216,7 +216,7 @@ void initializeGameMP(char snake[HEIGHT][WIDTH], Player *player1, Player *player
     player2->currentY = HEIGHT/2;
     player2->direction = PLAYER1_UP;
     player2->alive = 1;
-    player2->body = '⁰';
+    player2->body = 'o';
    player2->playerColor=YELLOW;
     player2->length = 3;
 
@@ -286,7 +286,7 @@ void singlePlayerSnake(){
         playerInput(&player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
         snakeMovement(snake,&player);
         snakeFunctionality(snake, &player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
-        wait(100);// verificar si se mueve muy rapido la snake, en ese caso agregar un wait(100)
+        ////// sys_wait(100);// verificar si se mueve muy rapido la snake, en ese caso agregar un wait(100)
     }
     //Revisar 
    snakeDeadSound();
@@ -323,7 +323,7 @@ void mpSnake(){
         snakeFunctionality2(snake, &player2,PLAYER2_UP,PLAYER2_DOWN,PLAYER2_LEFT,PLAYER2_RIGHT);
         
         drawBoard2(snake, &player1, &player2);
-        wait(100);
+        ///////////////////sys_wait(100);
         // verificar si se mueve muy rapido la snake, en ese caso agregar un wait()    
     }
     snakeDeadSound();

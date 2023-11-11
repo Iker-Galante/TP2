@@ -1,12 +1,13 @@
 #include "include/terminal.h"
 #include "include/colors.h"
 #include "include/usyscalls.h"
+#include "include/snake.h"
 #include "include/calls.h"
 
 #define COMMANDSQUANTITY 12
 
-static char* commands[]={"help","time","date","registers","fillregisters","divideby0","invalidoperation","snake","snake2","clear","zoomin","zoomout"};
-static char* commandsList={
+// static char* commands[]={"help","time","date","registers","fillregisters","divideby0","invalidoperation","snake","snake2","clear","zoomin","zoomout"};
+static char* commandsList[]={
     "\thelp: Muestra una lista de comandos posibles\n",
 	"\ttime: Imprime la hora del SO\n",
 	"\tdate: Imprime la fecha del SO\n",

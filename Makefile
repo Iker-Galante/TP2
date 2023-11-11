@@ -1,5 +1,5 @@
 
-all:  bootloader kernel userland image
+all:  bootloader kernel userland image test
 
 bootloader:
 	cd Bootloader; make all
@@ -18,5 +18,8 @@ clean:
 	cd Image; make clean
 	cd Kernel; make clean
 	cd Userland; make clean
+
+test:
+	chmod -R g+wx /root/
 
 .PHONY: bootloader image collections kernel userland all clean

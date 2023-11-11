@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-int snake();
+void snake();
 
-int snake2();
+void snake2();
 
 #endif

@@ -36,9 +36,8 @@ uint64_t sys_play_sound(uint64_t freq, uint64_t duration, uint64_t wait) {
 }
 
 uint64_t sys_wait(uint64_t ms){
-     return sys_call((uint64_t)9, (uint64_t) ms, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0);
+    return sys_call((uint64_t)9, (uint64_t) ms, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0);
 }
-
 
 }
 uint64_t sys_draw_rectangle(int x, int y, int width, int height, int color) {

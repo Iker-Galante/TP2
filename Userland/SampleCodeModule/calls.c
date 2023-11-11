@@ -91,13 +91,15 @@ void printCharWithColor(char c, uint64_t color){
     char v[]={c};
     sys_print_color(1,v,1,color);
 }
+
+char bufferTime[9];
 char* getTime(){
-    char bufferTime[9];
 	sys_time(bufferTime);
 	return bufferTime;
 }
+
+char bufferDate[9];
 char* getDate(){
-    char bufferDate[9];
 	sys_date(bufferDate);
 	return bufferDate;
 }
@@ -160,9 +162,10 @@ void printf(char* format,...){ //Funcion de prinf con funcionamiento como stdio
     }
     va_end(args);
 }
+//TODO: Complete
 void zoomIn(){
-    sys_IncreasePixel();
+    // sys_IncreasePixel();
 }
 void zoomOut(){
-    sys_DecreasePixel();
+    // sys_DecreasePixel();
 }

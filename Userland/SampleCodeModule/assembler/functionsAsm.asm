@@ -1,9 +1,9 @@
-GLOBAL invalidOperation
-GLOBAL divByZero
-GLOBAL fillRegisters
+GLOBAL invalidOperationCode
+GLOBAL divbyZero
+GLOBAL fillRegis
 
 invalidOperationCode:
-    mov ex6, rax
+    mov cr6, rax
     ret
 
 divbyZero:
