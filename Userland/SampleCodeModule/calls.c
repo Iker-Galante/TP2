@@ -65,28 +65,21 @@ void numToString(int num, char* str){
         str[len - 1 - j] = temp;
     }
 }
-void intToHexa(int num, char* hexa){
+//Covierto un numero de 64 bits a hexa
+void intToHexa(uint64_t num, char* hexa){
 int i = 0;
-    do {
-        int resto = num % 16;
-        if (resto < 10) {
-            hexa[i++] = resto + '0';
+    for (i = 15; i >= 0; i--) {
+        int aux = num & 0xF;
+        if (aux < 10) {
+            hex[i] = aux + '0';
         } else {
-            hexa[i++] = (resto - 10) + 'A';
+            hex[i] = aux - 10 + 'A';
         }
-        num /= 16;
-    } while (num > 0);
-
-    hexa[i] = '\0'; 
-
-    // Lo doy vuelta para ponerlo en el orden correcto
-    int len = i;
-    for (int j = 0; j < len / 2; j++) {
-        char temp = hexa[j];
-        hexa[j] = hexa[len - 1 - j];
-        hexa[len - 1 - j] = temp;
+        num >>= 4;
     }
+    hex[16] = 0;
 }
+
 void printCharWithColor(char c, uint64_t color){
     char v[]={c};
     sys_print_color(1,v,1,color);
