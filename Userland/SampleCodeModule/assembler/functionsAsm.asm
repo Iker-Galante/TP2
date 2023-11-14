@@ -3,7 +3,7 @@ GLOBAL divbyZero
 GLOBAL fillRegis
 
 invalidOperationCode:
-    mov jt7, rax
+    mov cr6, rax
     ret
 
 divbyZero:
