@@ -3,7 +3,10 @@
         "colors.h": "c",
         "string.h": "c",
         "stdint.h": "c",
-        "cstdint": "c"
+        "cstdint": "c",
+        "keyboard.h": "c",
+        "defs.h": "c",
+        "videodriver.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

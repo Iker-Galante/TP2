@@ -16,6 +16,7 @@ int main() {
 	getChar();
 	if(c=='s')
 		snake();
+		
 	sys_clean_screen();
 	terminal();
 	return 0;

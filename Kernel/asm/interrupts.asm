@@ -195,13 +195,14 @@ saveRegisters:
 
 
 	save_og_regs:
+	; Funcion para salvar los registros RBX, RBP, R12, R13, R15, RSP, RIP
 	mov [ogRegs+8*1], rbx
 	mov [ogRegs+8*2], rbp
 	mov [ogRegs+8*3], r12
 	mov [ogRegs+8*4], r13
 	mov [ogRegs+8*5], r15
 	mov [ogRegs+8*6], rsp	 ; RSP
-	mov rax, [rsp]   		 ; RSP contains the return adress, so we get the RIP
+	mov rax, [rsp]   		 ; RSP contiene la direccion de retorno, para obtener el RIP
 	mov [ogRegs+8*7], rax
 	ret
 
@@ -215,7 +216,7 @@ _irq01Handler:
 	pushState
 
 	in al, 0x60
-	cmp al, 0x1D; Left Control key
+	cmp al, 0x1D ; Left Control key
 	je saveRegisters
 
 	mov rdi, 1 ; pasaje de parametro

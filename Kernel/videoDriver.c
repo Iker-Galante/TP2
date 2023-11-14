@@ -68,7 +68,7 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
 }
 
 
-void drawRectangle(int x, int y, int width, int height, int color) {
+void drawRectangle(int x, int y, int width, int height, uint32_t color) {
 	for (int i = y; i < height; i++) {
 		for (int j = x; j < width; j++) {
 			putPixel(color,j, i);
@@ -78,7 +78,7 @@ void drawRectangle(int x, int y, int width, int height, int color) {
 
 int line = 1, column = 0;
 int showCursor = 1;
-
+//Me dice si el pixel esta ocupado o no  
 char getPixel(int x, int y) {
 	char * videoPtr = (char *) ((uint64_t)VBE_mode_info->framebuffer);
 	int offset = y * VBE_mode_info->pitch + x * (VBE_mode_info->bpp / 8);
@@ -96,18 +96,37 @@ char isSpaceEmpty(int x, int y) {
 	return 1;
 }
 
-void printChar(char c, int x, int y, Color color) {
+void printChar(char c, int x, int y, uint32_t color) {
     if (c == '\b') {
+		if (x <= 0 && y <= 0)
+			return;
         // Handle backspace
         if (x >= CHAR_WIDTH) {
-            x -= CHAR_WIDTH;
+            column -= 2; //Espacio que ocupa un caracter en pantalla
+			//Borra los pixeles del caracter anterior
+			for (int i = y; i < y + CHAR_HEIGHT; i++) {
+				for (int j = x - CHAR_WIDTH; j < x; j++) {
+					putPixel(0x000000, j, i);
+				}
+			}
         } else if (line > 0) {
             line--;
-            x = (MAX_COLUMNS - 1) * CHAR_WIDTH;
+            column = MAX_COLUMNS - 2; //Revisar esto
+			int c=0;
+			//Borro por si escribi mas de una linea
+			for (int i = line * CHAR_HEIGHT; i < (line + 1) * CHAR_HEIGHT; i++) {
+				for (int j = (column + 1) * CHAR_WIDTH; j < (MAX_COLUMNS + 2) * CHAR_WIDTH; j++) {
+					putPixel(0x000000, j, i);
+				}
+			}
+			while (isSpaceEmpty(column * CHAR_WIDTH, line * CHAR_HEIGHT) && column >= 1) {
+				column--;
+				c++;
+			}
         }
     } else if (c == '\t') {
         // Handle tab
-        int spaces = 4 - (column % 4);
+        int spaces = 4 - (column % 4); //Revisar pq dudoso
         for (int i = 0; i < spaces; i++) {
             if (x < VBE_mode_info->width) {
                 printChar(' ', x, y, color);
@@ -115,23 +134,23 @@ void printChar(char c, int x, int y, Color color) {
             }
         }
     } else {
-        // Print a regular character
+        // Imprimo el caracter normal (REVISAR)
         if (c < FIRST_CHAR || c > LAST_CHAR)
             return;
 
         const unsigned char *charMap = font[c - 32];
         for (int i = 0; i < CHAR_HEIGHT; i++) {
-            char mask = 0b10000000;
+            char mask = 0b1000000;
             for (int j = 0; j < CHAR_WIDTH; j++) {
                 if (*charMap & mask) {
-                    putPixel(((uint32_t)color.r << 16) | ((uint32_t)color.g << 8) | color.b, x + j, y + i);
+                    putPixel(color, x + j, y + i);
                 }
-                mask >>= 1;
+                mask >>= 1; //Pq desplazo de bits?
             }
             charMap++;
         }
 
-        // Move the cursor
+        // Move the cursor (REVISA ESTO)
         x += CHAR_WIDTH;
         if (x >= VBE_mode_info->width) {
             x = 0;
@@ -149,7 +168,7 @@ unsigned int strlen(char * str) {
     return i;
 }
 
-void printStringPlace(char * string, int x, int y, Color color) {
+void printStringPlace(char * string, int x, int y, uint32_t color) {
 	int i = 0;
 	int oldColumn = column;
 	int oldLine = line;
@@ -165,8 +184,8 @@ void printStringPlace(char * string, int x, int y, Color color) {
 void moveCursor() {
     if (showCursor) {
         uint32_t cursorColor = 0xFFFFFF;  // White color in hexadecimal (0xFFFFFF)
-        for (uint64_t i = line * CHAR_HEIGHT; i < (line + 1) * CHAR_HEIGHT; i++) {
-            for (uint64_t j = (column + 1) * CHAR_WIDTH; j < (column + 2) * CHAR_WIDTH; j++) {
+        for (int i = line * CHAR_HEIGHT; i < (line + 1) * CHAR_HEIGHT; i++) {
+            for (int j = (column + 1) * CHAR_WIDTH; j < (column + 2) * CHAR_WIDTH; j++) {
                 putPixel(cursorColor, j, i);
             }
         }
@@ -191,14 +210,14 @@ void printString(char * string) {
 }
 
 void printStringN(char * string, uint64_t length) {
-	printStringNColor(string, length, RED);
+	printStringNColor(string, length, (uint32_t)0xFF0000);
 }
 
-void printStringColor(char * string, Color color) {
+void printStringColor(char * string, uint32_t color) {
 	printStringNColor(string, strlen(string), color);
 }
 
-void printStringNColor(char * string, uint64_t length, Color color) {
+void printStringNColor(char * string, uint64_t length, uint32_t color) {
 	int i = 0;
 	eraseCursor();
 	while (string[i] != 0 && length > 0) {

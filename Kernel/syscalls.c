@@ -1,12 +1,12 @@
 #include <stdint.h>
-#include <videoDriver.h>
-#include <defs.h>
-#include <syscall.h>
-#include <keyboard.h>
-#include <clock.h>
-#include <sound.h>
-#include <time.h>
-#include <colores.h>
+#include "include/videoDriver.h"
+#include "include/defs.h"
+#include "include/syscall.h"
+#include "include/keyboard.h"
+#include "include/defs.h"
+#include "include/sound.h"
+#include "include/time.h"
+#include "include/colores.h" //REVISAR DUDOSO
 
 
 //Ver nombres de func y cambiarlos para adecaurlos a los de userland
@@ -49,13 +49,14 @@ void syscallHandler(uint64_t id, uint64_t arg0, uint64_t arg1, uint64_t arg2, ui
 }
 
 
-static uint64_t sys_read(uint64_t fd, uint64_t buffer, uint64_t length) {
+static int64_t sys_read(uint64_t fd, uint64_t buffer, uint64_t length) {
+    //No deberia ser necesario, pero por las dudas
     if (fd != STDIN) 
         return -1;
     int i = 0;
     char c;
     char * buff = (char *) buffer;
-    while(i < length && (c = getChar()) != 0) {
+    while(i < length && (c = getChar()) != 0) { //0 es el fin de linea
         buff[i] = c;
         i++;
     }
@@ -66,18 +67,15 @@ static void sys_print(uint64_t fd, uint64_t buffer, uint64_t length) {
     if (fd == STDOUT) {
         printStringN((char *) buffer, length);
     } else if (fd == STDERR) {
-        printStringNColor((char *) buffer, length, RED);
+        printStringNColor((char *) buffer, length,(uint32_t) 0xFF0000);
     }
 }
 
 
 static void sys_print_color(uint64_t fd, uint64_t buffer, uint64_t length, uint64_t color) {
+    //Imprimo en pantalla si es salida estandar o error
     if (fd == STDOUT || fd == STDERR) {
-        Color c;
-        c.r = (char) color;
-        c.g = (char) (color >> 8);
-        c.b = (char) (color >> 16);
-        printStringNColor((char *) buffer, length, c);
+        printStringNColor((char *) buffer, length,(uint32_t) color);
     }
 }
 

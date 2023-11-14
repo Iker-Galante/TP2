@@ -45,16 +45,19 @@ while (1) {
     } else if (c > 20 && c < 127) {
         printChar(c);
         newbuffer[count++] = c;
-        newbuffer[count] = 0;
+        newbuffer[count] = 0; //Hace falta?
     }
 }
 
 }
 
 int commandMatch(char *str1, char *command, int count) {
+    //Si no coincide el largo no es ese comando
     if (count != strlen(command))
         return 0;
-
+/*while (str1[i] != '\0' && command[i] != '\0' && str1[i] == command[i] && i < count) {
+		i++;*/
+//No se que tan buena es la opcion de arriba    
     for (int i = 0; i < count; i++) {
         if (str1[i] != command[i])
             return 0;
@@ -74,7 +77,7 @@ void analizeBuffer(char *buffer, int count) {
             printWithColor(commandsList[i], RED);
         }
     } else if (commandMatch(buffer, "time", count)) {
-        printf("\n\nHora del SO ", RED);
+        printf("\n\nHora del SO ");
         printf("%s\n",getTime());
     } else if (commandMatch(buffer, "date", count)) {
         printf("\n\nFecha del SO ");

@@ -106,9 +106,6 @@ void initializeGame(char snake[HEIGHT][WIDTH], Player *player){
     player->body = '*';
     player->playerColor=BLUE;
     player->length = 3;
-
-    snake[player->currentY][player->currentX] = player->body;
-
     int i,j;
 
     for(i = 0; i < HEIGHT ; i++){
@@ -116,6 +113,10 @@ void initializeGame(char snake[HEIGHT][WIDTH], Player *player){
             snake[i][j] = '0'; 
         }
     }
+    snake[player->currentY][player->currentX] = player->body;
+    //snake[player->currentY][player->currentX + 1] = player->body;  REVISAR
+    //snake[player->currentY][player->currentX + 2] = player->body;
+
 
     createFood(snake,&foodPosX,&foodPosY);
 }

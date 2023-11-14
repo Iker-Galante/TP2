@@ -9,13 +9,8 @@ uint64_t sys_read(unsigned int fd, char * buffer, unsigned int size){
 uint64_t sys_print(unsigned int fd, char* buffer, unsigned int size) {
     return sys_call((uint64_t) 1, (uint64_t) fd, (uint64_t) buffer, (uint64_t) size, (uint64_t) 0, (uint64_t) 0);
 }
-//Revisar pq puede estar mal el color
+
 uint64_t sys_print_color(unsigned int fd,  char* buffer, unsigned int size, uint64_t color) {
-    /* uint64_t c = color.b;
-    c <<= 2;
-    c += color.g;
-    c <<= 2;
-    c += color.r; */
     return sys_call((uint64_t) 2, (uint64_t) fd, (uint64_t) buffer, (uint64_t) size, color, (uint64_t) 0);
 }
 
