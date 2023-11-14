@@ -34,7 +34,7 @@ void moveOneLineUp();
 
 void printStringColor(char * string, uint32_t color);
 
-void printStringNColor(char * buffer, uint32_t length, uint32_t color);
+void printStringNColor(char * buffer, uint64_t length, uint32_t color);
 
 void moveCursor();
 
