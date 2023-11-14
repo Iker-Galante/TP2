@@ -7,7 +7,7 @@
 #include "include/sound.h"
 #include "include/time.h"
 #include "include/clock.h"
-#include "include/colores.h" //REVISAR DUDOSO
+//#include "include/colores.h" //REVISAR DUDOSO
 
 
 //Ver nombres de func y cambiarlos para adecaurlos a los de userland
