@@ -11,7 +11,8 @@
 extern unsigned char clock(unsigned char mode); // assembly function
 
 static unsigned int decode(unsigned char time) {
-    return (time >> 4) * 10 + (time & 0x0F);
+    return (time >> 4) * 10 + (time & 0x0F); //Guardo 4 bits mas significativos y guardo 4 bits menos significativos
+    //Luego multiplico por 10 pues el tiempo va de 0 a 9 y sumo
 }
 
 unsigned int seconds() {
@@ -37,29 +38,29 @@ unsigned int month() {
 unsigned int year() {
     return decode(clock(YEAR));
 }
-
+//Las dos funciones reciben el string y por consecuente lo modifican
 void timeToStr(char* dest) {
-    dest[2] = dest[5] = ':';
-    uint8_t s, m, h = hours();
+    dest[2] = dest[5] = ':'; //Divido para minutos y segundos
+    uint8_t s, m, h = hours(); //Obtengo la hora
     dest[0] = (h/10) % 10 + '0';
     dest[1] = h % 10 + '0';
-    m = minutes();
+    m = minutes(); //Obtengo los minutos
     dest[3] = (m/10) % 10 + '0';
     dest[4] = m % 10 + '0';
-    s = seconds();
+    s = seconds(); //Obtengo los segundos
     dest[6] = (s/10) % 10 + '0';
     dest[7] = s % 10 + '0';
 }
 
 void dateToStr(char* dest) {
-    dest[2] = dest [5] = '/';
-    uint8_t d = day(), m, y;
+    dest[2] = dest [5] = '/'; //Separo los dias, meses y años
+    uint8_t d = day(), m, y; //Obtengo el dia
     dest[0] = (d/10) % 10 + '0';
     dest[1] = d % 10 + '0';
-    m = month();
+    m = month(); //Obtengo el mes
     dest[3] = (m/10) % 10 + '0';
     dest[4] = m % 10 + '0';
-    y = year();
+    y = year(); //Obtengo el año
     dest[6] = (y/10) % 10 + '0';
     dest[7] = y % 10 + '0';
 }

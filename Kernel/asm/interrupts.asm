@@ -158,40 +158,38 @@ picSlaveMask:
     retn
 
 saveRegisters:
-	;mov[registers], rax done below
-	mov[registers + (1*8)], rbx
-	mov[registers + (2*8)], rcx
-	mov[registers + (3*8)], rdx
-	mov[registers + (4*8)], rsi
-	mov[registers + (5*8)], rdi
-	mov[registers + (6*8)], rbp
-	;mov[registers+ (7*8)], rsp done below
-	mov[registers + (8*8)], r8
-	mov[registers + (9*8)], r9
-	mov[registers + (10*8)], r10
-	mov[registers + (11*8)], r11
-	mov[registers + (12*8)], r12
-	mov[registers + (13*8)], r13
-	mov[registers + (14*8)], r14
-	mov[registers + (15*8)], r15
-	;mov[registers+ (16*8)], rip done below
+; Movimiento de registros a la región reservada de memoria 'registers'
+	mov [registers + (1*8)], rbx ; Se almacena el contenido de RBX
+	mov [registers + (2*8)], rcx ; Se almacena el contenido de RCX
+	mov [registers + (3*8)], rdx ; Se almacena el contenido de RDX
+	mov [registers + (4*8)], rsi ; Se almacena el contenido de RSI
+	mov [registers + (5*8)], rdi ; Se almacena el contenido de RDI
+	mov [registers + (6*8)], rbp ; Se almacena el contenido de RBP
+	mov [registers + (8*8)], r8  ; Se almacena el contenido de R8
+	mov [registers + (9*8)], r9  ; Se almacena el contenido de R9
+	mov [registers + (10*8)], r10 ; Se almacena el contenido de R10
+	mov [registers + (11*8)], r11 ; Se almacena el contenido de R11
+	mov [registers + (12*8)], r12 ; Se almacena el contenido de R12
+	mov [registers + (13*8)], r13 ; Se almacena el contenido de R13
+	mov [registers + (14*8)], r14 ; Se almacena el contenido de R14
+	mov [registers + (15*8)], r15 ; Se almacena el contenido de R15
 
-	mov rax, [rsp+18*8]
-	; add rax, 	; 112 bytes from pushState + 32 bytes of iretq 
-	mov[registers + (7*8)], rax ; RSP
+	; Almacenamiento de RSP y RIP después de operaciones específicas
+	mov rax, [rsp + 18*8]       ; Se carga RSP+18*8 en RAX
+	mov [registers + (7*8)], rax ; Se almacena el contenido de RAX en [registers + (7*8)] (RSP)
 
-	mov rax, [rsp + 15*8]
-	mov[registers + (16*8)], rax ; RIP
+	mov rax, [rsp + 15*8]        ; Se carga RSP+15*8 en RAX
+	mov [registers + (16*8)], rax ; Se almacena el contenido de RAX en [registers + (16*8)] (RIP)
 
-	mov rax, [rsp + 14*8]	; RAX
-	mov[registers], rax
+	mov rax, [rsp + 14*8] ; Se carga RSP+14*8 en RAX (RAX)
+	mov [registers], rax  ; Se almacena el contenido de RAX en el primer registro
+	
+	; Finalización de la interrupción con un comando de Fin de Interrupción (EOI)
+	mov al, 20h      ; Se carga el valor 20h en AL
+	out 20h, al      ; Se envía el valor de AL al puerto de EOI (End of Interrupt)
 
-	; signal pic EOI (End of Interrupt)
-	mov al, 20h
-	out 20h, al
-
-	popState
-	iretq 	; SS, RSP, RFLAGS, CS, RIP
+	popState         ; Operación para restaurar el estado previo
+	iretq            ; Instrucción para retornar desde la interrupción (SS, RSP, RFLAGS, CS, RIP)
 
 
 	save_og_regs:
@@ -269,6 +267,6 @@ haltcpu:
 
 SECTION .bss
 	aux resq 1
-	registers resq 17 ; registers for screenshot
-	excepRegs resq 18 ; registers for exceptions
-	ogRegs resq 17		;Vector for original registers
+	registers resq 17 ; registros para pantalla
+	excepRegs resq 18 ; registros para excepciones
+	ogRegs resq 17		;Vector orignial de registros

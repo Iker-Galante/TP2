@@ -6,11 +6,12 @@
 #include "include/defs.h"
 #include "include/sound.h"
 #include "include/time.h"
+#include "include/clock.h"
 #include "include/colores.h" //REVISAR DUDOSO
 
 
 //Ver nombres de func y cambiarlos para adecaurlos a los de userland
-extern const uint64_t registers[17];
+extern const uint64_t registers[17]; //Funcion en assembly
 
 void syscallHandler(uint64_t id, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5) {
     switch(id) {
@@ -80,6 +81,7 @@ static void sys_print_color(uint64_t fd, uint64_t buffer, uint64_t length, uint6
 }
 
 static void sys_get_registers(uint64_t regsBuff) {
+    //Guargo los registros en el buffer, sacados en codigo assembly
     for(int i = 0; i < 17; i++) {
         ((uint64_t *)regsBuff)[i] = registers[i];
     }

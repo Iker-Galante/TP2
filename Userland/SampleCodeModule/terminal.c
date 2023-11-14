@@ -78,14 +78,14 @@ void analizeBuffer(char *buffer, int count) {
         }
     } else if (commandMatch(buffer, "time", count)) {
         printf("\n\nHora del SO ");
-        printf("%s\n",getTime());
+        printf("%s\n",getTime()); //Devuelve el tiempo en formato hh:mm:ss
     } else if (commandMatch(buffer, "date", count)) {
         printf("\n\nFecha del SO ");
-        printf("%s\n", getDate());
+        printf("%s\n", getDate()); //Devuelve la fecha en formato dd/mm/aaaa
     } else if (commandMatch(buffer, "registers", count)) {
-        printRegisters();
-    } else if (commandMatch(buffer, "fillregisters", count)) {
-        fillRegisters();
+        printRegisters(); //Imprimo los registros en el llamado de la func
+    } else if (commandMatch(buffer, "fillregs", count)) {
+        fillRegisters(); //Lleno los registros en el llamado de la func
     } else if (commandMatch(buffer, "clear", count)) {
         sys_clean_screen();
     } else if (commandMatch(buffer, "snake2", count)) {

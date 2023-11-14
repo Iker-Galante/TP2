@@ -6,7 +6,8 @@
         "cstdint": "c",
         "keyboard.h": "c",
         "defs.h": "c",
-        "videodriver.h": "c"
+        "videodriver.h": "c",
+        "compare": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

@@ -3,7 +3,7 @@ GLOBAL divbyZero
 GLOBAL fillRegis
 
 invalidOperationCode:
-    mov cr6, rax
+    mov jt7, rax
     ret
 
 divbyZero:
@@ -12,7 +12,7 @@ divbyZero:
     div ebx
     ret
 
-%macro pushState 0
+%macro pushState 0 ;No recibo parametros
 	push rax
 	push rbx
 	push rcx
@@ -30,7 +30,7 @@ divbyZero:
 	push r15
 %endmacro
 
-%macro popState 0
+%macro popState 0 ;No recibo parametros
 	pop r15
 	pop r14
 	pop r13

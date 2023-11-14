@@ -45,17 +45,18 @@ getKey:
 ; Start Clock
 
 clock:
-	push rbp
-	mov rbp, rsp
+    push rbp        ; Save the base pointer
+    mov rbp, rsp    ; Set up the stack frame
 
-	mov al, dil
-	out 70h, al
-	xor rax, rax
-	in al, 71h
+    mov al, dil     ; Move the value from the lower byte of the parameter dil into al
+    out 70h, al     ; Output the value of al to the CMOS address port (70h)
 
-	mov rsp, rbp
-	pop rbp
-	ret
+    xor rax, rax    ; Clear rax (setting it to 0)
+    in al, 71h      ; Read the value from the CMOS data port (71h) into al
+
+    mov rsp, rbp    ; Restore the stack pointer
+    pop rbp         ; Restore the base pointer
+    ret             ; Return from the function
 
 ; End Clock 
 
