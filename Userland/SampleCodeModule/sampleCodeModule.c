@@ -13,6 +13,7 @@ int main() {
 	do{
 		c=getChar();
 	}while(c!='s' && c!='t');
+	getChar();
 	if(c=='s')
 		snake();
 	sys_clean_screen();

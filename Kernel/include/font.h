@@ -5,7 +5,7 @@
 #define FIRST_CHAR 32
 #define LAST_CHAR 126
 
-#define CHAR_WIDTH 8 
+#define CHAR_WIDTH 8
 #define CHAR_HEIGHT 16 
 
 const uint8_t font[][16] = {

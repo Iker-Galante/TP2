@@ -18,8 +18,8 @@ static char* commandsList[]={
 	"\tsnake: Ejecutar el juego snake de a 1 jugador\n",
     "\tsnake2: Ejecutar el juego snake de a 2 jugadores\n",
 	"\tclear: Limpia pantalla del SO\n",
-    "\tzoomIn: Aumentar tamaño de letra\n",
-    "\tzoomOut: Achicar tamaño de letra\n"
+    "\tzoomin: Aumentar tamaño de letra\n",
+    "\tzoomout: Achicar tamaño de letra\n"
 };
 
 void terminal(){
@@ -87,9 +87,9 @@ void analizeBuffer(char *buffer, int count) {
         sys_clean_screen();
     } else if (commandMatch(buffer, "snake2", count)) {
         snake2(); //Ver como implementar
-    } else if (commandMatch(buffer, "divideby0", count)) {
+    } else if (commandMatch(buffer, "div0", count)) {
         divbyZero();
-    } else if (commandMatch(buffer, "invalidoperation", count)) {
+    } else if (commandMatch(buffer, "invalidop", count)) {
         invalidOperationCode();
     } else if (commandMatch(buffer, "snake", count)) {
        snake(); //Ver como implementar

@@ -66,7 +66,7 @@ void numToString(int num, char* str){
     }
 }
 //Covierto un numero de 64 bits a hexa
-void intToHexa(uint64_t num, char* hexa){
+void intToHexa(uint64_t num, char* hex){
 int i = 0;
     for (i = 15; i >= 0; i--) {
         int aux = num & 0xF;
