@@ -68,12 +68,24 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
 }
 
 
-void drawRectangle(int x, int y, int width, int height, uint32_t color) {
-	for (int i = y; i < height; i++) {
-		for (int j = x; j < width; j++) {
+void drawRectangle(int x, int y, uint32_t color) { //ver de pasarle ancho y largo
+	for (int i = y+1; i < y+23; i++) {
+		for (int j= x+1; j < x+31; j++) {
 			putPixel(color,j, i);
 		}
 	}
+}
+
+void drawBoard(int x, int y, uint32_t color){ //Borrar o pasar parametros
+	//Me hace lineas horizontales
+	for(int i=0;i<768;i+=767)
+		for(int j=0; j<1024;j++)
+			putPixel(color,j,i);
+
+	//Hago lineas verticales
+	for(int i=0;i<1024;i+=1023)
+		for(int j=0; j<768;j++)
+			putPixel(color,i,j);
 }
 
 int line = 1, column = 0;
@@ -143,9 +155,11 @@ void printChar(char c, int x, int y, uint32_t color) {
             char mask = 0b1000000;
             for (int j = 0; j < CHAR_WIDTH; j++) {
                 if (*charMap & mask) {
+					//if(font==1){
                     putPixel(color, x + j, y + i);
+					//}else{}
                 }
-                mask >>= 1; //Pq desplazo de bits?
+                mask >>= 1; 
             }
             charMap++;
         }
@@ -183,7 +197,7 @@ void printStringPlace(char * string, int x, int y, uint32_t color) {
 }
 void moveCursor() {
     if (showCursor) {
-        uint32_t cursorColor = 0xFFFFFF;  // White color in hexadecimal (0xFFFFFF)
+        uint32_t cursorColor = 0xFFFFFF;  // Color blanco en hexa 
         for (int i = line * CHAR_HEIGHT; i < (line + 1) * CHAR_HEIGHT; i++) {
             for (int j = (column + 1) * CHAR_WIDTH; j < (column + 2) * CHAR_WIDTH; j++) {
                 putPixel(cursorColor, j, i);
@@ -194,7 +208,7 @@ void moveCursor() {
 
 void eraseCursor() {
     if (showCursor) {
-        uint32_t bgColor = 0x000000;  // Black color in hexadecimal (0x000000)
+        uint32_t bgColor = 0x000000;  // Color negro en hexa
         for (uint64_t i = line * CHAR_HEIGHT; i < (line + 1) * CHAR_HEIGHT; i++) {
             for (uint64_t j = (column + 1) * CHAR_WIDTH; j < (column + 2) * CHAR_WIDTH; j++) {
                 putPixel(bgColor, j, i);
@@ -240,7 +254,7 @@ void printStringNColor(char * string, uint64_t length, uint32_t color) {
 	}
 	moveCursor();
 }
-
+//Imprimo linea
 void printLn(char * string) {
 	printString(string);
 	line++;
@@ -265,5 +279,11 @@ void clearScreen() {
 	line = 1;
 	column = 0;
 	moveCursor();
+}
+
+void changeit() {
+	if (showCursor)
+		eraseCursor();
+	showCursor = !showCursor;
 }
 

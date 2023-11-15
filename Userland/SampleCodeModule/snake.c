@@ -3,11 +3,11 @@
 #include <usyscalls.h>
 #include <colors.h>
 #include <calls.h>
-#include <drawings.h>
-#include <sounds.h>
+#include "include/drawings.h"
+#include "include/sounds.h"
 #define WIDTH 32
 #define HEIGHT 32
-#define MAXDIM 200
+#define MAXDIM 1024 //REVISAR
 
 #define PIXELWIDTH 32
 #define PIXELHEIGHT 24
@@ -24,7 +24,6 @@
 #define PLAYER2_RIGHT 'l'
 
 
-static unsigned long int next = 1;
 
 
 void singlePlayerSnake();
@@ -45,8 +44,8 @@ int finish;
 int foodPosX, foodPosY;
 
 struct Position{
-    int x;
-    int y;
+    int i;
+    int j;
 };
 
 typedef struct Player{
@@ -63,27 +62,26 @@ typedef struct Player{
 
 //checkear color y tema del drawrectangle
 
-void drawBoard(char board[HEIGHT][WIDTH], Player *player) {
-    uint64_t currentColor;
+void drawBoard(char board[HEIGHT][WIDTH], Player *player) {  //CORREGIR Y PASARLE PARAMETROS DE ANCHO Y LARGO
     int i, j;
-    
+    uint32_t currentColor;
     // Recorre las filas y columnas del tablero
     for (i = 0; i < HEIGHT; i++) {
         for (j = 0; j < WIDTH; j++) {
             // Si la celda está vacía, establece el color de fondo en blanco
             if (board[i][j] == '0') {
-                currentColor = WHITE;
+                currentColor = 0x00FF00; //Verde
             }
             // Si la celda contiene al jugador, usa su color
-            else if (i == player-> currentY && j == player-> currentX) {
+            else if (board[i][j]=='*') {
                 currentColor = player->playerColor;
             }
             // Si la celda contiene comida, usa un color específico
-            else if (board[i][j] == '*') {
-            currentColor = RED;
+            else if (board[i][j] == '#') {
+            currentColor = 0xFF0000; //Rojo para comida
             }
             // Dibuja en la posición actual con el color correspondiente
-            drawBox(j*PIXELWIDTH , i * PIXELHEIGHT,(j*PIXELWIDTH)+PIXELWIDTH , (i*PIXELHEIGHT)+PIXELHEIGHT, currentColor);
+            drawBox(j*PIXELWIDTH , i * PIXELHEIGHT, currentColor);
         }
     }
 
@@ -98,23 +96,23 @@ void createFood(char snake[HEIGHT][WIDTH], int *foodPosX, int *foodPosY){
     snake[*foodPosY][*foodPosX] = '#';
 }
 
-void initializeGame(char snake[HEIGHT][WIDTH], Player *player){
-    player->currentX = WIDTH/2; 
+void initializeGame(char snake[HEIGHT][WIDTH], Player *player){ //_hlt para dormir 
+    player->currentX = WIDTH/2; //Empiezo en el medio
     player->currentY = HEIGHT/2;
     player->direction = PLAYER1_UP;
     player->alive = 1;
     player->body = '*';
-    player->playerColor=BLUE;
+    player->playerColor=0xFFFFFF; //Color blanco
     player->length = 3;
     int i,j;
-
+    snake[player->currentY][player->currentX] = player->body;
     for(i = 0; i < HEIGHT ; i++){
         for (j = 0 ; j < WIDTH; j++){
             snake[i][j] = '0'; 
         }
     }
-    snake[player->currentY][player->currentX] = player->body;
-    //snake[player->currentY][player->currentX + 1] = player->body;  REVISAR
+    
+    //snake[player->currentY][player->currentX + 1] = player->body; // REVISAR
     //snake[player->currentY][player->currentX + 2] = player->body;
 
 
@@ -144,7 +142,7 @@ void eraseTail(char board[HEIGHT][WIDTH], int i, int j) {
 //revisar eraseTail call
 void snakeMovement(char snake[HEIGHT][WIDTH], Player *player) {
     if (player->length >= 1) {
-        eraseTail(snake, player->position[player->length - 1].x, player->position[player->length - 1].y);
+        eraseTail(snake, player->position[player->length - 1].i, player->position[player->length - 1].j);
         for (int i = player->length - 1; i > 0; i--) {
             player->position[i] = player->position[i - 1];
         }
@@ -165,7 +163,7 @@ void gameLogic(char snake[HEIGHT][WIDTH], Player * player, char up, char down, c
 
     // check self collision
     for (int i = 0; (i < player->length) && player->alive; i++) {
-        if (player->currentX == player->position[i].y && player->currentY == player->position[i].x ) {
+        if (player->currentX == player->position[i].j && player->currentY == player->position[i].i ) {
             player->alive = 0;
         }
     }
@@ -186,13 +184,13 @@ void gameLogic(char snake[HEIGHT][WIDTH], Player * player, char up, char down, c
         player->length++;
         createFood(snake, &foodPosX, &foodPosY);
         //sys_playSound(1500);
-        //sys_mute();
+        //sys_mute(); VER SCRIPT WPP
     }
 
     if (player->alive) {
         snake[player->currentY][player->currentX] = player->body;
-        player->position[0].y = player->currentY;
-        player->position[0].x = player->currentX;
+        player->position[0].j = player->currentY;
+        player->position[0].i = player->currentX;
     }
 }
 
@@ -228,7 +226,7 @@ void initializeGameMP(char snake[HEIGHT][WIDTH], Player *player1, Player *player
 
     for(i = 0; i < HEIGHT ; i++){
         for (j = 0 ; j < WIDTH; j++){
-            snake[i][j] = '0'; // 
+            snake[i][j] = '0';  
         }
     }
 
@@ -263,7 +261,8 @@ void drawBoard2(char board[HEIGHT][WIDTH], Player *player1, Player *player2) {
               currentColor = RED;
             }
             // Dibuja un rectángulo en la posición actual con el color correspondiente
-            drawBox(j*PIXELWIDTH , i * PIXELHEIGHT,(j*PIXELWIDTH)+PIXELWIDTH , (i*PIXELHEIGHT)+PIXELHEIGHT, currentColor);          }
+            //drawBox(j*PIXELWIDTH , i * PIXELHEIGHT,(j*PIXELWIDTH)+PIXELWIDTH , (i*PIXELHEIGHT)+PIXELHEIGHT, currentColor);       
+               }
     }
 
 }
@@ -271,6 +270,7 @@ void drawBoard2(char board[HEIGHT][WIDTH], Player *player1, Player *player2) {
 ////////// 1 player startup //////////
 void snake(){
     sys_clean_screen();
+    sys_change_cursor();
     singlePlayerSnake();
 }
 
@@ -278,7 +278,7 @@ void snake(){
 void singlePlayerSnake(){
     char snake[HEIGHT][WIDTH];
     Player player;
-
+    sys_draw_board(0,0,0xFFFFFF); //Dibujo el tablero de blanco
     initializeGame(snake,&player);
 
     finish = 0;
@@ -290,13 +290,12 @@ void singlePlayerSnake(){
         ////// sys_wait(100);// verificar si se mueve muy rapido la snake, en ese caso agregar un wait(100)
     }
     //Revisar 
-   snakeDeadSound();
+   //snakeDeadSound();
    sys_clean_screen();
    print("GAME OVER,Press \"e\" to exit");
    while(getChar() != 'e');
-   sys_clean_screen(); //Revisar por si hay que llamar a terminal
+   sys_clean_screen(); //Revisar por si hay que llamar a terminal*/
 }
-
 
 ////////// 2 players startup //////////
 
@@ -327,7 +326,7 @@ void mpSnake(){
         ///////////////////sys_wait(100);
         // verificar si se mueve muy rapido la snake, en ese caso agregar un wait()    
     }
-    snakeDeadSound();
+   // snakeDeadSound();
     sys_clean_screen();
    print("GAME OVER,Press \"e\" to exit");
    while(getChar() != 'e');

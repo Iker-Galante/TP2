@@ -1,7 +1,6 @@
 #ifndef _VIDEODRIVER_H
 #define _VIDEODRIVER_H
 
-#include <colores.h>
 #include <stdint.h>
 
 #define DEFAULT_FONT_SIZE 4
@@ -14,7 +13,7 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y);
 
 void drawWhiteLine();
 
-void drawRectangle(int x, int y, int width, int height, uint32_t color);
+void drawRectangle(int x, int y, uint32_t color);
 
 char getPixel(int x, int y);
 
@@ -38,6 +37,8 @@ void printStringNColor(char * buffer, uint64_t length, uint32_t color);
 
 void moveCursor();
 
+void printRegisters();
+
 void eraseCursor();
 
 void clearScreen();
@@ -50,4 +51,7 @@ void toggleCursor();
 
 void drawImage(const unsigned long int * image, int width, int height);
 
+void drawBoard(int x, int y, uint32_t color);
+
+void changeit();
 #endif

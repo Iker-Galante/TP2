@@ -37,13 +37,22 @@ void syscallHandler(uint64_t id, uint64_t arg0, uint64_t arg1, uint64_t arg2, ui
             sys_clear_screen();
             break;
         case 7:
-            sys_draw_rectangle(arg0, arg1, arg2, arg3, arg4);
+            sys_draw_rectangle(arg0, arg1,arg2);
             break;
         case 8:
             sys_play_sound(arg0, arg1, arg2);
             break;
         case 9:
             sys_wait(arg0);
+            break;
+        case 10:
+            sys_greaterPixel();
+            break;
+        case 11:
+            sys_board(arg0,arg1,arg2);
+            break;
+        case 12:
+            sys_cursor();
             break;
     }
     
@@ -99,8 +108,8 @@ static void sys_clear_screen() {
     clearScreen();
 }
 
-static void sys_draw_rectangle(uint64_t x, uint64_t y, uint64_t width, uint64_t height, uint64_t color) {
-    drawRectangle( (int) x, (int) y, (int) width, (int) height, (int) color );
+static void sys_draw_rectangle(uint64_t x, uint64_t y, uint64_t color) {
+    drawRectangle( (int) x, (int) y, (uint32_t) color );
 }
 
 static void sys_play_sound(uint64_t freq, uint64_t duration, uint64_t waitAfter) {
@@ -120,4 +129,19 @@ static void sys_wait(uint64_t ms){
         int start_ms = ticks_elapsed();
         do { _hlt(); } while (ticks_elapsed() - start_ms < ms);
     }
+}
+
+static void sys_board(uint64_t x, uint64_t y, uint64_t color){
+    drawBoard(x,y,color);
+}
+
+static void sys_greaterPixel(){
+    int font=1;
+    if(font!=3)
+        font+=1;
+    return ;
+}
+
+static void sys_cursor() {
+    changeit();
 }

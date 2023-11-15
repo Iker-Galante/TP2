@@ -80,20 +80,24 @@ SECTION .text
 
 
 %macro exceptionHandler 1
-	; When exception occurs we bring RIP value getting the return address of the interrpution
-    mov [excepRegs + (1*8)], rax    ;rax
+	; Guarda el valor de RAX en la posición 1 de excepRegs
+    mov [excepRegs + (1*8)], rax    ; rax
+    ; Captura el valor de la pila (RSP) en RAX y lo guarda como RIP en excepRegs
     mov rax, [rsp]
-    mov [excepRegs], rax            ;rip
+    mov [excepRegs], rax            ; rip
 
+    ; Guarda los valores de RBX, RCX, RDX, RSI, RDI, RBP en excepRegs
     mov [excepRegs + (2*8)], rbx
     mov [excepRegs + (3*8)], rcx
     mov [excepRegs + (4*8)], rdx
     mov [excepRegs + (5*8)], rsi
     mov [excepRegs + (6*8)], rdi
     mov [excepRegs + (7*8)], rbp
-    mov rax, [rsp + 24]
-	; add rax, 24	; 8 bytes of RIP, 8 bytes of CS and 8 bytes of RFLAGS
-    mov [excepRegs + (8*8)], rax    ; RSP
+    
+	; Captura el valor de la pila en RAX y lo guarda como RSP en excepRegs
+	mov rax, [rsp + 24]  ; Se suman 24 bytes (8 bytes de RIP, 8 bytes de CS y 8 bytes de RFLAGS)
+	mov [excepRegs + (8*8)], rax    ; rsp
+    ; Guarda los valores de R8, R9, R10, R11, R12, R13, R14, R15 en excepRegs
     mov [excepRegs + (9*8)], r8
     mov [excepRegs + (10*8)], r9
     mov [excepRegs + (11*8)], r10 
@@ -102,10 +106,12 @@ SECTION .text
     mov [excepRegs + (14*8)], r13 
     mov [excepRegs + (15*8)], r14 
     mov [excepRegs + (16*8)], r15 
-    mov rax, [rsp+16] ; Value of RFLAGS (it is pushed when an interrupt occurs).
-    mov [excepRegs + (17*8)], rax    ;rflags
+    ; Captura el valor de RFLAGS en RAX y lo guarda en excepRegs
+    mov rax, [rsp+16] ; Valor de RFLAGS (empujado al ocurrir una interrupción).
+    mov [excepRegs + (17*8)], rax    ; rflags
 
-    mov rdi, %1 ; pasaje de parametro
+    ; Prepara el argumento para la llamada a la función exceptionDispatcher
+    mov rdi, %1 ; Paso de parámetro
     mov rsi, excepRegs
     call exceptionDispatcher
 
@@ -192,7 +198,7 @@ saveRegisters:
 	iretq            ; Instrucción para retornar desde la interrupción (SS, RSP, RFLAGS, CS, RIP)
 
 
-	save_og_regs:
+	save_og_regs: ;BORRAR NUNCA LLEGA
 	; Funcion para salvar los registros RBX, RBP, R12, R13, R15, RSP, RIP
 	mov [ogRegs+8*1], rbx
 	mov [ogRegs+8*2], rbp
