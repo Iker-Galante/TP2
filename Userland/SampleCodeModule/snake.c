@@ -62,7 +62,7 @@ typedef struct Player{
 
 //checkear color y tema del drawrectangle
 
-void drawBoard(char board[HEIGHT][WIDTH], Player *player) {  //CORREGIR Y PASARLE PARAMETROS DE ANCHO Y LARGO
+void drawBoard(char board[HEIGHT][WIDTH], Player *player) {
     int i, j;
     uint32_t currentColor;
     // Recorre las filas y columnas del tablero
@@ -70,22 +70,22 @@ void drawBoard(char board[HEIGHT][WIDTH], Player *player) {  //CORREGIR Y PASARL
         for (j = 0; j < WIDTH; j++) {
             // Si la celda está vacía, establece el color de fondo en blanco
             if (board[i][j] == '0') {
-                currentColor = 0x00FF00; //Verde
+                currentColor = 0x00FF00; // Verde
             }
             // Si la celda contiene al jugador, usa su color
-            else if (board[i][j]=='*') {
+            else if (board[i][j] == '*') {
                 currentColor = player->playerColor;
             }
             // Si la celda contiene comida, usa un color específico
             else if (board[i][j] == '#') {
-            currentColor = 0xFF0000; //Rojo para comida
+                currentColor = 0xFF0000; // Rojo para comida
             }
             // Dibuja en la posición actual con el color correspondiente
-            drawBox(j*PIXELWIDTH , i * PIXELHEIGHT, currentColor);
+            drawBox(j * PIXELWIDTH, i * PIXELHEIGHT, currentColor);
         }
     }
-
 }
+
 
 void createFood(char snake[HEIGHT][WIDTH], int *foodPosX, int *foodPosY){
     do{
@@ -102,7 +102,7 @@ void initializeGame(char snake[HEIGHT][WIDTH], Player *player){ //_hlt para dorm
     player->direction = PLAYER1_UP;
     player->alive = 1;
     player->body = '*';
-    player->playerColor=0xFFFFFF; //Color blanco
+    player->playerColor=0xAAAFFF; //Color blanco
     player->length = 3;
     int i,j;
     snake[player->currentY][player->currentX] = player->body;
@@ -141,12 +141,21 @@ void eraseTail(char board[HEIGHT][WIDTH], int i, int j) {
 
 //revisar eraseTail call
 void snakeMovement(char snake[HEIGHT][WIDTH], Player *player) {
-    if (player->length >= 1) {
-        eraseTail(snake, player->position[player->length - 1].i, player->position[player->length - 1].j);
-        for (int i = player->length - 1; i > 0; i--) {
-            player->position[i] = player->position[i - 1];
-        }
+    // Guarda la posición actual de la cabeza de la serpiente
+    int headI = player->currentY;
+    int headJ = player->currentX;
+
+    // Borra la antigua posición de la cola
+    eraseTail(snake, player->position[player->length - 1].i, player->position[player->length - 1].j);
+
+    // Actualiza las posiciones de la cola
+    for (int i = player->length - 1; i > 0; i--) {
+        player->position[i] = player->position[i - 1];
     }
+
+    // Actualiza la posición de la cabeza
+    player->position[0].i = headI;
+    player->position[0].j = headJ;
 }
 
 void gameLogic(char snake[HEIGHT][WIDTH], Player * player, char up, char down, char left, char right){
@@ -189,8 +198,7 @@ void gameLogic(char snake[HEIGHT][WIDTH], Player * player, char up, char down, c
 
     if (player->alive) {
         snake[player->currentY][player->currentX] = player->body;
-        player->position[0].j = player->currentY;
-        player->position[0].i = player->currentX;
+
     }
 }
 
@@ -203,6 +211,14 @@ void snakeFunctionality(char snake[HEIGHT][WIDTH], Player *player, char up, char
 ///// IMPLEMENTATION 2 PLAYERS ////
 
 void initializeGameMP(char snake[HEIGHT][WIDTH], Player *player1, Player *player2){
+
+    int i, j;
+    for(i = 0; i < HEIGHT ; i++){
+        for (j = 0 ; j < WIDTH; j++){
+            snake[i][j] = '0';  
+        }
+    }
+    
     player1->currentX = WIDTH/4;
     player1->currentY = HEIGHT/2;
     player1->direction = PLAYER1_LEFT;
@@ -213,22 +229,16 @@ void initializeGameMP(char snake[HEIGHT][WIDTH], Player *player1, Player *player
 
     player2->currentX = 2 * WIDTH/4;
     player2->currentY = HEIGHT/2;
-    player2->direction = PLAYER1_UP;
+    player2->direction = PLAYER2_UP;
     player2->alive = 1;
-    player2->body = 'o';
-   player2->playerColor=YELLOW;
+    player2->body = '+';
+    player2->playerColor=YELLOW;
     player2->length = 3;
 
     snake[player1->currentY][player1->currentX] = player1->body;
     snake[player2->currentY][player2->currentX] = player2->body;
 
-    int i,j;
-
-    for(i = 0; i < HEIGHT ; i++){
-        for (j = 0 ; j < WIDTH; j++){
-            snake[i][j] = '0';  
-        }
-    }
+    
 
     createFood(snake,&foodPosX,&foodPosY);
 
@@ -236,7 +246,7 @@ void initializeGameMP(char snake[HEIGHT][WIDTH], Player *player1, Player *player
 
 void snakeFunctionality2(char snake[HEIGHT][WIDTH], Player *player, char up, char down, char left, char right) {
     gameLogic(snake,player,up,down,left,right);
-
+    drawBoard(snake, player);
 }
 
 void drawBoard2(char board[HEIGHT][WIDTH], Player *player1, Player *player2) {
@@ -253,9 +263,10 @@ void drawBoard2(char board[HEIGHT][WIDTH], Player *player1, Player *player2) {
             // Si la celda contiene al jugador, usa su color
             else if (i == player1-> currentY && j == player1-> currentX) {
                 currentColor = player1->playerColor;
-            }else if(i == player1 -> currentY && j == player2 -> currentX){
+            }else if(i == player2 -> currentY && j == player2 -> currentX){
                 currentColor = player2 ->playerColor;
             }
+            
             // Si la celda contiene comida, usa un color específico
             else if (board[i][j] == '*') {
               currentColor = RED;
@@ -314,10 +325,11 @@ void mpSnake(){
     finish = 0;
 
     while(!finish){
+        /*
         playerInput(&player1,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
         snakeMovement(snake,&player1);
         snakeFunctionality2(snake, &player1,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
-       
+       */
         playerInput(&player2,PLAYER2_UP,PLAYER2_DOWN,PLAYER2_LEFT,PLAYER2_RIGHT);
         snakeMovement(snake,&player2);
         snakeFunctionality2(snake, &player2,PLAYER2_UP,PLAYER2_DOWN,PLAYER2_LEFT,PLAYER2_RIGHT);
