@@ -246,7 +246,6 @@ void initializeGameMP(char snake[HEIGHT][WIDTH], Player *player1, Player *player
 
 void snakeFunctionality2(char snake[HEIGHT][WIDTH], Player *player, char up, char down, char left, char right) {
     gameLogic(snake,player,up,down,left,right);
-    drawBoard(snake, player);
 }
 
 void drawBoard2(char snake[HEIGHT][WIDTH], Player *player1, Player *player2) {
