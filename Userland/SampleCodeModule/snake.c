@@ -103,7 +103,7 @@ void initializeGame(char snake[HEIGHT][WIDTH], Player *player){ //_hlt para dorm
     player->alive = 1;
     player->body = '*';
     player->playerColor=0xAAAFFF; //Color blanco
-    player->length = 3;
+    player->length = 1;
     int i,j;
     snake[player->currentY][player->currentX] = player->body;
     for(i = 0; i < HEIGHT ; i++){
@@ -224,16 +224,16 @@ void initializeGameMP(char snake[HEIGHT][WIDTH], Player *player1, Player *player
     player1->direction = PLAYER1_LEFT;
     player1->alive = 1;
     player1->body = '*';
-    player1->playerColor= BLUE;
-    player1->length = 3;
+    player1->playerColor=BLUE;
+    player1->length = 1;
 
-    player2->currentX = 2 * WIDTH/4;
+    player2->currentX =  WIDTH/2;
     player2->currentY = HEIGHT/2;
     player2->direction = PLAYER2_UP;
     player2->alive = 1;
     player2->body = '+';
     player2->playerColor=YELLOW;
-    player2->length = 3;
+    player2->length = 1;
 
     snake[player1->currentY][player1->currentX] = player1->body;
     snake[player2->currentY][player2->currentX] = player2->body;
@@ -249,7 +249,7 @@ void snakeFunctionality2(char snake[HEIGHT][WIDTH], Player *player, char up, cha
     drawBoard(snake, player);
 }
 
-void drawBoard2(char board[HEIGHT][WIDTH], Player *player1, Player *player2) {
+void drawBoard2(char snake[HEIGHT][WIDTH], Player *player1, Player *player2) {
     uint64_t currentColor;
     int i, j;
     
@@ -257,22 +257,22 @@ void drawBoard2(char board[HEIGHT][WIDTH], Player *player1, Player *player2) {
     for (i = 0; i < HEIGHT; i++) {
         for (j = 0; j < WIDTH; j++) {
             // Si la celda está vacía, establece el color de fondo en blanco
-            if (board[i][j] == '0') {
+            if (snake[i][j] == '0') {
                 currentColor = WHITE;
             }
             // Si la celda contiene al jugador, usa su color
-            else if (i == player1-> currentY && j == player1-> currentX) {
+            else if (snake[i][j] == player1->body) {
                 currentColor = player1->playerColor;
-            }else if(i == player2 -> currentY && j == player2 -> currentX){
+            }else if(snake[i][j] == player2->body){
                 currentColor = player2 ->playerColor;
             }
             
             // Si la celda contiene comida, usa un color específico
-            else if (board[i][j] == '*') {
+            else if (snake[i][j] == '*') {
               currentColor = RED;
             }
             // Dibuja un rectángulo en la posición actual con el color correspondiente
-            //drawBox(j*PIXELWIDTH , i * PIXELHEIGHT,(j*PIXELWIDTH)+PIXELWIDTH , (i*PIXELHEIGHT)+PIXELHEIGHT, currentColor);       
+            drawBox(j * PIXELWIDTH, i * PIXELHEIGHT, currentColor);
                }
     }
 
@@ -312,6 +312,7 @@ void singlePlayerSnake(){
 
 void snake2(){
     sys_clean_screen();
+    sys_change_cursor();
     mpSnake();
 }
 
@@ -325,11 +326,11 @@ void mpSnake(){
     finish = 0;
 
     while(!finish){
-        /*
+    
         playerInput(&player1,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
         snakeMovement(snake,&player1);
         snakeFunctionality2(snake, &player1,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
-       */
+       
         playerInput(&player2,PLAYER2_UP,PLAYER2_DOWN,PLAYER2_LEFT,PLAYER2_RIGHT);
         snakeMovement(snake,&player2);
         snakeFunctionality2(snake, &player2,PLAYER2_UP,PLAYER2_DOWN,PLAYER2_LEFT,PLAYER2_RIGHT);
