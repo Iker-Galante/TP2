@@ -209,7 +209,7 @@ void snakeFunctionality(char snake[HEIGHT][WIDTH], Player *player, char up, char
 }
 
 ///// IMPLEMENTATION 2 PLAYERS ////
-
+//a 
 void initializeGameMP(char snake[HEIGHT][WIDTH], Player *player1, Player *player2){
 
     int i, j;
