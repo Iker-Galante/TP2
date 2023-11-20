@@ -81,7 +81,7 @@ void drawBoard(char board[HEIGHT][WIDTH], Player *player) {
                 currentColor = 0xFF0000; // Rojo para comida
             }
             // Dibuja en la posición actual con el color correspondiente
-            drawBox(j * PIXELWIDTH, i * PIXELHEIGHT, currentColor);
+            drawBox(j * PIXELWIDTH, i * PIXELHEIGHT,PIXELWIDTH,PIXELHEIGHT , currentColor);
         }
     }
 }
@@ -271,7 +271,7 @@ void drawBoard2(char snake[HEIGHT][WIDTH], Player *player1, Player *player2) {
               currentColor = RED;
             }
             // Dibuja un rectángulo en la posición actual con el color correspondiente
-            drawBox(j * PIXELWIDTH, i * PIXELHEIGHT, currentColor);
+            drawBox(j * PIXELWIDTH, i * PIXELHEIGHT,PIXELWIDTH,PIXELHEIGHT,currentColor);
                }
     }
 
@@ -288,7 +288,7 @@ void snake(){
 void singlePlayerSnake(){
     char snake[HEIGHT][WIDTH];
     Player player;
-    sys_draw_board(0,0,0xFFFFFF); //Dibujo el tablero de blanco
+    //sys_draw_board(0,0,0xFFFFFF); //Dibujo el tablero de blanco
     initializeGame(snake,&player);
 
     finish = 0;
@@ -297,7 +297,7 @@ void singlePlayerSnake(){
         playerInput(&player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
         snakeMovement(snake,&player);
         snakeFunctionality(snake, &player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
-        ////// sys_wait(100);// verificar si se mueve muy rapido la snake, en ese caso agregar un wait(100)
+        sys_wait(5);// verificar si se mueve muy rapido la snake, en ese caso agregar un wait(100)
     }
     //Revisar 
    //snakeDeadSound();
@@ -335,7 +335,7 @@ void mpSnake(){
         snakeFunctionality2(snake, &player2,PLAYER2_UP,PLAYER2_DOWN,PLAYER2_LEFT,PLAYER2_RIGHT);
         
         drawBoard2(snake, &player1, &player2);
-        ///////////////////sys_wait(100);
+        sys_wait(5);
         // verificar si se mueve muy rapido la snake, en ese caso agregar un wait()    
     }
    // snakeDeadSound();

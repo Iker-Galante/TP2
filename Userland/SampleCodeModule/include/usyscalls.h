@@ -10,7 +10,7 @@ uint64_t sys_date(char* buffer);
 uint64_t sys_registers(uint64_t* registerBuffer);
 uint64_t sys_IncreasePixel();
 uint64_t sys_DecreasePixel();
-uint64_t sys_draw_rectangle(int x, int y, uint32_t color);
+uint64_t sys_draw_rectangle(int x, int y,int width, int heigth,uint32_t color);
 uint64_t sys_play_sound(int freq, int duration, int wait);
 uint64_t sys_wait(uint64_t ms);
 uint64_t sys_draw_board(int x, int y, uint64_t color);

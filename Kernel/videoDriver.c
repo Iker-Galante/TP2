@@ -68,9 +68,9 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
 }
 
 
-void drawRectangle(int x, int y, uint32_t color) { //ver de pasarle ancho y largo
-	for (int i = y+1; i < y+23; i++) {
-		for (int j= x+1; j < x+31; j++) {
+void drawRectangle(int x, int y,int width, int heigth, uint32_t color) { //ver de pasarle ancho y largo
+	for (int i = y+1; i < y+heigth-1; i++) {
+		for (int j= x+1; j < x+width-1; j++) {
 			putPixel(color,j, i);
 		}
 	}
