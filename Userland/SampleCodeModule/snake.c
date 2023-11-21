@@ -210,6 +210,17 @@ void snakeFunctionality(char snake[HEIGHT][WIDTH], Player *player, char up, char
 
 ///// IMPLEMENTATION 2 PLAYERS ////
 //a 
+
+void createFood2(char snake[HEIGHT][WIDTH], int *foodPosX, int *foodPosY, Player *player1, Player *player2) {
+    do {
+        *foodPosX = random_1_to_31();
+        *foodPosY = random_1_to_31();
+    } while (snake[*foodPosY][*foodPosX] != '0' ||
+             (player1->currentY == *foodPosY && player1->currentX == *foodPosX) ||
+             (player2->currentY == *foodPosY && player2->currentX == *foodPosX));
+
+    snake[*foodPosY][*foodPosX] = '#';
+}
 void initializeGameMP(char snake[HEIGHT][WIDTH], Player *player1, Player *player2){
 
     int i, j;
@@ -240,7 +251,7 @@ void initializeGameMP(char snake[HEIGHT][WIDTH], Player *player1, Player *player
 
     
 
-    createFood(snake,&foodPosX,&foodPosY);
+    createFood2(snake, &foodPosX, &foodPosY, player1, player2);
 
 }
 
@@ -259,23 +270,25 @@ void drawBoard2(char snake[HEIGHT][WIDTH], Player *player1, Player *player2) {
             if (snake[i][j] == '0') {
                 currentColor = WHITE;
             }
-            // Si la celda contiene al jugador, usa su color
+            // Si la celda contiene al jugador 1, usa su color
             else if (snake[i][j] == player1->body) {
                 currentColor = player1->playerColor;
-            }else if(snake[i][j] == player2->body){
-                currentColor = player2 ->playerColor;
+            }
+            // Si la celda contiene al jugador 2, usa su color
+            else if(snake[i][j] == player2->body) {
+                currentColor = player2->playerColor;
+            }
+            // Si la celda contiene comida, usa un color específico
+            else if(snake[i][j] == '#') {
+                currentColor = RED;
             }
             
-            // Si la celda contiene comida, usa un color específico
-            else if (snake[i][j] == '*') {
-              currentColor = RED;
-            }
             // Dibuja un rectángulo en la posición actual con el color correspondiente
-            drawBox(j * PIXELWIDTH, i * PIXELHEIGHT,PIXELWIDTH,PIXELHEIGHT,currentColor);
-               }
+            drawBox(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH, PIXELHEIGHT, currentColor);
+        }
     }
-
 }
+
 
 ////////// 1 player startup //////////
 void snake(){
