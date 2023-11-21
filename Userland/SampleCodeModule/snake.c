@@ -310,10 +310,10 @@ void singlePlayerSnake(){
         playerInput(&player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
         snakeMovement(snake,&player);
         snakeFunctionality(snake, &player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
-        sys_wait(5);// verificar si se mueve muy rapido la snake, en ese caso agregar un wait(100)
+        sys_wait(5);// verificar si se mueve muy rapido la snake, en ese caso agregar un wait(x)
     }
     //Revisar 
-   //snakeDeadSound();
+   snakeDeadSound();
    sys_clean_screen();
    print("GAME OVER,Press \"e\" to exit");
    while(getChar() != 'e');
@@ -351,7 +351,7 @@ void mpSnake(){
         sys_wait(5);
         // verificar si se mueve muy rapido la snake, en ese caso agregar un wait()    
     }
-   // snakeDeadSound();
+    snakeDeadSound();
     sys_clean_screen();
    print("GAME OVER,Press \"e\" to exit");
    while(getChar() != 'e');

@@ -6,5 +6,5 @@ void playNote(int freq, int duration, int wait){
 }
 
 void snakeDeadSound(){
-    playNote(310,6,30);
+    playNote(310,6,3);
 }
