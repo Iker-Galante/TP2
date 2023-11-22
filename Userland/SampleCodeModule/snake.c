@@ -301,7 +301,6 @@ void snake(){
 void singlePlayerSnake(){
     char snake[HEIGHT][WIDTH];
     Player player;
-    //sys_draw_board(0,0,0xFFFFFF); //Dibujo el tablero de blanco
     initializeGame(snake,&player);
 
     finish = 0;

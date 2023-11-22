@@ -157,8 +157,8 @@ void printf(char* format,...){ //Funcion de prinf con funcionamiento como stdio
 }
 //TODO: Complete
 void zoomIn(){
-    // sys_IncreasePixel();
+    sys_IncreasePixel();
 }
 void zoomOut(){
-    // sys_DecreasePixel();
+    sys_DecreasePixel();
 }

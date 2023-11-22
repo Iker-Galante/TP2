@@ -49,7 +49,7 @@ void syscallHandler(uint64_t id, uint64_t arg0, uint64_t arg1, uint64_t arg2, ui
             sys_greaterPixel();
             break;
         case 11:
-            sys_board(arg0,arg1,arg2);
+            sys_lowerPixel();
             break;
         case 12:
             sys_cursor();
@@ -116,13 +116,6 @@ static void sys_play_sound(uint64_t freq, uint64_t duration, uint64_t waitAfter)
     playNoteSound((int) freq, (int) duration, (int) waitAfter);
 }
 
-
-static void sys_get_ticks(uint64_t ticks) {
-    uint32_t * t = (uint32_t *) ticks;    
-    *t = ticks_elapsed();
-}
-
-
 static void sys_waiting(uint64_t ms){
 
     if (ms > 0){
@@ -131,17 +124,15 @@ static void sys_waiting(uint64_t ms){
     }
 }
 
-static void sys_board(uint64_t x, uint64_t y, uint64_t color){
-    drawBoard(x,y,color);
-}
 
 static void sys_greaterPixel(){
-    int font=1;
-    if(font!=3)
-        font+=1;
-    return ;
+    increaseEscale();
+    sys_clear_screen();
 }
-
+static void sys_lowerPixel(){
+    decreaseEscale();
+    sys_clear_screen();
+}
 static void sys_cursor() {
     changeit();
 }

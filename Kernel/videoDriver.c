@@ -49,14 +49,16 @@ VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
 #define MAX_LINES VBE_mode_info->height / CHAR_HEIGHT
 #define MAX_COLUMNS VBE_mode_info->width / CHAR_WIDTH - 1
 
-uint32_t size = DEFAULT_FONT_SIZE;
-
-void setFontSize(uint32_t new_font_size){
-	size = new_font_size;
+uint8_t font = 1;
+uint16_t line = 0, column = 0;
+int showCursor = 1;
+void increaseEscale(){
+	if(font < 3 )
+		font ++;
 }
-
-uint32_t getFontSize(){
-	return size;
+void decreaseEscale(){
+	if(font > 1)
+		font --;
 }
 
 void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
@@ -76,20 +78,6 @@ void drawRectangle(int x, int y,int width, int heigth, uint32_t color) { //ver d
 	}
 }
 
-void drawBoard(int x, int y, uint32_t color){ //Borrar o pasar parametros
-	//Me hace lineas horizontales
-	for(int i=0;i<768;i+=767)
-		for(int j=0; j<1024;j++)
-			putPixel(color,j,i);
-
-	//Hago lineas verticales
-	for(int i=0;i<1024;i+=1023)
-		for(int j=0; j<768;j++)
-			putPixel(color,i,j);
-}
-
-int line = 1, column = 0;
-int showCursor = 1;
 //Me dice si el pixel esta ocupado o no  
 char getPixel(int x, int y) {
 	char * videoPtr = (char *) ((uint64_t)VBE_mode_info->framebuffer);
@@ -107,72 +95,50 @@ char isSpaceEmpty(int x, int y) {
 	}
 	return 1;
 }
+static uint32_t* getPixelPtr(uint16_t x, uint16_t y) {
+    uint8_t pixelwidth = VBE_mode_info->bpp/8;     //la cantidad de bytes hasta el siguiente pixel a la derecha (bpp: BITS per px)
+    uint16_t pixelHeight = VBE_mode_info->pitch;   //la cantidad de bytes hasta el pixel hacia abajo
+
+    uintptr_t pixelPtr = (uintptr_t)(VBE_mode_info->framebuffer) + (x * pixelwidth) + (y * pixelHeight);
+    return (uint32_t*)pixelPtr;
+}
+void setPixel(uint32_t color, int x, int y){
+	    if (x >= VBE_mode_info->width || y >= VBE_mode_info->height)
+        return;
+
+    uint32_t* pixel = getPixelPtr(x, y);
+    *pixel = color;
+}
 
 void printChar(char c, int x, int y, uint32_t color) {
-    if (c == '\b') {
-		if (x <= 0 && y <= 0)
-			return;
-        // Handle backspace
-        if (x >= CHAR_WIDTH) {
-            column -= 2; //Espacio que ocupa un caracter en pantalla
-			//Borra los pixeles del caracter anterior
-			for (int i = y; i < y + CHAR_HEIGHT; i++) {
-				for (int j = x - CHAR_WIDTH; j < x; j++) {
-					putPixel(0x000000, j, i);
-				}
-			}
-        } else if (line > 0) {
-            line--;
-            column = MAX_COLUMNS - 2; //Revisar esto
-			int c=0;
-			//Borro por si escribi mas de una linea
-			for (int i = line * CHAR_HEIGHT; i < (line + 1) * CHAR_HEIGHT; i++) {
-				for (int j = (column + 1) * CHAR_WIDTH; j < (MAX_COLUMNS + 2) * CHAR_WIDTH; j++) {
-					putPixel(0x000000, j, i);
-				}
-			}
-			while (isSpaceEmpty(column * CHAR_WIDTH, line * CHAR_HEIGHT) && column >= 1) {
-				column--;
-				c++;
-			}
-        }
-    } else if (c == '\t') {
-        // Handle tab
-        int spaces = 4 - (column % 4); //Revisar pq dudoso
-        for (int i = 0; i < spaces; i++) {
-            if (x < VBE_mode_info->width) {
-                printChar(' ', x, y, color);
-                x += CHAR_WIDTH;
-            }
-        }
-    } else {
+	int caracterx,caractery;
+	if(column >= VBE_mode_info->width){
+		column=0;
+		if(line + CHAR_HEIGHT * font > VBE_mode_info->height){
+			line -= CHAR_HEIGHT * font;
+			moveOneLineUp();
+		} else{
+			line += CHAR_HEIGHT * font;
+		}
+	}
+	    int mask[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
+    const unsigned char *glyph = IBM_VGA_8x16_glyph_bitmap + 16 * (c - 32);
         // Imprimo el caracter normal (REVISAR)
         if (c < FIRST_CHAR || c > LAST_CHAR)
             return;
 
-        const unsigned char *charMap = font[c - 32];
-        for (int i = 0; i < CHAR_HEIGHT; i++) {
-            char mask = 0b1000000;
-            for (int j = 0; j < CHAR_WIDTH; j++) {
-                if (*charMap & mask) {
-					//if(font==1){
-                    putPixel(color, x + j, y + i);
-					//}else{}
-                }
-                mask >>= 1; 
+        
+        for (caractery = 0; caractery < CHAR_HEIGHT; caractery++) {
+            
+            for ( caracterx = 0; caracterx < CHAR_WIDTH; caracterx++) {
+                
+					for(int i=0;i<font;i++)
+						for(int j=0;j<font;j++)
+							setPixel(glyph[caractery] & mask[caracterx] ? color : 0x000000,column+(8-caracterx)*font+i,line+caractery*font+j);
+                } 
             }
-            charMap++;
+			column += CHAR_WIDTH * font;
         }
-
-        // Move the cursor (REVISA ESTO)
-        x += CHAR_WIDTH;
-        if (x >= VBE_mode_info->width) {
-            x = 0;
-            line++;
-        }
-    }
-}
-
 
 unsigned int strlen(char * str) {
     unsigned int i = 0;
@@ -182,25 +148,12 @@ unsigned int strlen(char * str) {
     return i;
 }
 
-void printStringPlace(char * string, int x, int y, uint32_t color) {
-	int i = 0;
-	int oldColumn = column;
-	int oldLine = line;
-	column = x / CHAR_WIDTH;
-	line = y / CHAR_HEIGHT;
-	while (string[i] != 0) {
-		printChar(string[i], x + i * CHAR_WIDTH, y, color);
-		i++;
-	}
-	column = oldColumn;
-	line = oldLine;
-}
 void moveCursor() {
     if (showCursor) {
         uint32_t cursorColor = 0xFFFFFF;  // Color blanco en hexa 
         for (int i = line * CHAR_HEIGHT; i < (line + 1) * CHAR_HEIGHT; i++) {
             for (int j = (column + 1) * CHAR_WIDTH; j < (column + 2) * CHAR_WIDTH; j++) {
-                putPixel(cursorColor, j, i);
+                setPixel(cursorColor, j, i);
             }
         }
     }
@@ -211,13 +164,13 @@ void eraseCursor() {
         uint32_t bgColor = 0x000000;  // Color negro en hexa
         for (uint64_t i = line * CHAR_HEIGHT; i < (line + 1) * CHAR_HEIGHT; i++) {
             for (uint64_t j = (column + 1) * CHAR_WIDTH; j < (column + 2) * CHAR_WIDTH; j++) {
-                putPixel(bgColor, j, i);
+                setPixel(bgColor, j, i);
             }
         }
     }
 }
 
-
+	
 
 void printString(char * string) {
 	printStringN(string, strlen(string));
@@ -236,17 +189,24 @@ void printStringNColor(char * string, uint64_t length, uint32_t color) {
 	eraseCursor();
 	while (string[i] != 0 && length > 0) {
 		if (string[i] == '\n') {
-			line++;
-			column = 0;
-		} else {
-			column++;
-			printChar(string[i], column * CHAR_WIDTH, line * CHAR_HEIGHT, color);
-			if (column >= MAX_COLUMNS - 1) {
-				line++;
+			column=0;
+			line += CHAR_HEIGHT * font;
+		} else if (string[i] == '\b'){
+			if(column >= CHAR_WIDTH * font){
+				column -= CHAR_WIDTH * font;
+			} else{ column=0;}
+		printChar(' ',column,line,0x000000);
+		column -= CHAR_WIDTH * font;
+		}else{	
+			//column += CHAR_WIDTH * font; 
+			printChar(string[i], column /* CHAR_WIDTH*/, line /* CHAR_HEIGHT*/, color);
+			if (column + CHAR_WIDTH * font > VBE_mode_info->width) {
+				line +=CHAR_HEIGHT * font ;
 				column = 0;
 			}
 		}
-		if (line >= MAX_LINES) {
+		if(line + CHAR_HEIGHT * font > VBE_mode_info->height){
+			line -= CHAR_HEIGHT * font;
 			moveOneLineUp();
 		}
 		i++;
@@ -267,16 +227,16 @@ void printLn(char * string) {
 
 void moveOneLineUp() {
 	char * dst = (char *) (uint64_t)(VBE_mode_info->framebuffer);
-	char * src = dst + VBE_mode_info->pitch * CHAR_HEIGHT;
-	memcpy(dst, src, VBE_mode_info->pitch * (VBE_mode_info->height - CHAR_HEIGHT));
-	memset((void *) (uint64_t)(VBE_mode_info->framebuffer + VBE_mode_info->pitch * (VBE_mode_info->height - CHAR_HEIGHT)), 0, VBE_mode_info->pitch * CHAR_HEIGHT);
-	line--;
+	char * src = dst + VBE_mode_info->pitch * CHAR_HEIGHT * font;
+	memcpy(dst, src, VBE_mode_info->pitch * (VBE_mode_info->height - CHAR_HEIGHT *font));
+	memset((void *) (uint64_t)(VBE_mode_info->framebuffer + VBE_mode_info->pitch * (VBE_mode_info->height - CHAR_HEIGHT *font)), 0, VBE_mode_info->pitch * CHAR_HEIGHT *font);
+
 }
 
 
 void clearScreen() {
 	memset((void *) (uint64_t)(VBE_mode_info->framebuffer), 0, VBE_mode_info->pitch * VBE_mode_info->height);
-	line = 1;
+	line = 0;
 	column = 0;
 	moveCursor();
 }
@@ -286,4 +246,3 @@ void changeit() {
 		eraseCursor();
 	showCursor = !showCursor;
 }
-

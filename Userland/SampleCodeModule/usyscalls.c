@@ -40,9 +40,9 @@ uint64_t sys_draw_rectangle(int x, int y,int width,int height, uint32_t color) {
 uint64_t sys_IncreasePixel() {
     return sys_call((uint64_t) 10, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0);
 }
-uint64_t sys_draw_board(int x, int y, uint64_t color) {
-    return sys_call((uint64_t) 11, (uint64_t) x, (uint64_t) y, (uint64_t) color, (uint64_t) 0, (uint64_t) 0);
-}
 uint64_t sys_change_cursor() {
     return sys_call((uint64_t) 12, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0);
+}
+uint64_t sys_DecreasePixel() {
+    return sys_call((uint64_t) 11, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0, (uint64_t) 0);
 }
