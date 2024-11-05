@@ -16,6 +16,11 @@ GLOBAL _int80Handler
 
 GLOBAL _exception0Handler
 GLOBAL _exception6Handler
+GLOBAL _exception13Handler
+
+GLOBAL createStack
+GLOBAL forceScheduler
+GLOBAL forceProcessChange
 
 GLOBAL registers
 GLOBAL excepRegs
@@ -26,10 +31,11 @@ EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 EXTERN syscallHandler
 
+EXTERN scheduler
+
 SECTION .text
 
-%macro pushState 0
-	push rax
+%macro pushStateNoRax 0
 	push rbx
 	push rcx
 	push rdx
@@ -46,7 +52,7 @@ SECTION .text
 	push r15
 %endmacro
 
-%macro popState 0
+%macro popStateNoRax 0
 	pop r15
 	pop r14
 	pop r13
@@ -61,6 +67,15 @@ SECTION .text
 	pop rdx
 	pop rcx
 	pop rbx
+%endmacro
+
+%macro pushState 0
+	push rax
+	pushStateNoRax
+%endmacro
+
+%macro popState 0
+	popStateNoRax
 	pop rax
 %endmacro
 
@@ -190,12 +205,7 @@ saveRegisters:
 	mov rax, [rsp + 14*8] ; Se carga RSP+14*8 en RAX (RAX)
 	mov [registers], rax  ; Se almacena el contenido de RAX en el primer registro
 	
-	; Finalización de la interrupción con un comando de Fin de Interrupción (EOI)
-	mov al, 20h      ; Se carga el valor 20h en AL
-	out 20h, al      ; Se envía el valor de AL al puerto de EOI (End of Interrupt)
-
-	popState         ; Operación para restaurar el estado previo
-	iretq            ; Instrucción para retornar desde la interrupción (SS, RSP, RFLAGS, CS, RIP)
+	jmp continueKeyboard
 
 
 	save_og_regs: ;BORRAR NUNCA LLEGA
@@ -213,7 +223,31 @@ saveRegisters:
 
 ;8254 Timer (Timer Tick)
 _irq00Handler:
-	irqHandlerMaster 0
+	cli
+	pushState
+
+	;Paso el Stack pointer y el SS como argumentos
+	mov rdi, rsp 
+	call scheduler
+	
+	cmp rax, 0
+	je .continue
+
+	; Cambio el Stack Pointer al del nuevo proceso
+	mov rsp, rax 
+
+	.continue:
+
+	mov rdi, 0 ; pasaje de parametro
+	call irqDispatcher
+
+	; Finalización de la interrupción con un comando de Fin de Interrupción (EOI)
+	mov al, 20h      ; Se carga el valor 20h en AL
+	out 20h, al      ; Se envía el valor de AL al puerto de EOI (End of Interrupt)
+
+	popState         ; Operación para restaurar el estado previo
+	sti				 ; Habilito interrupciónes
+	iretq            ; Instrucción para retornar desde la interrupción (SS, RSP, RFLAGS, CS, RIP)
 
 ;Keyboard
 _irq01Handler:
@@ -223,6 +257,7 @@ _irq01Handler:
 	cmp al, 0x1D ; Left Control key
 	je saveRegisters
 
+	continueKeyboard:
 	mov rdi, 1 ; pasaje de parametro
 	call irqDispatcher
 
@@ -251,9 +286,9 @@ _irq05Handler:
 
 ;Syscalls
 _int80Handler:
-	pushState
+	pushStateNoRax
 	call syscallHandler
-	popState
+	popStateNoRax
 	iretq
 
 ;Zero Division Exception
@@ -269,6 +304,43 @@ haltcpu:
 	hlt
 	ret
 
+createStack: ; En RDI STACK - En RSI PROGRAMA - En RDX ARGUMENTOS - En RCX LA WRAPPER 
+	mov r8, rsp	 ; preservo viejo RSP
+	mov rsp, rdi
+	push 0x0 ; el SS
+	push rdi ; el RSP
+	push 0x202 ; el RFLAGS
+	push 0x8 ; el CS
+
+	push rcx ; el RIP ahora es el wrapper.
+
+	push 0x0 ; el RAX
+	push 0x1 ; rbx
+    push 0x2 ; rcx
+    push 0x3 ; rdx
+    push 0x4 ; rbp
+    push rsi ; rdi
+    push rdx ; rsi
+    push 0x8 ; r8
+    push 0x9 ; r9
+    push 0x10 ; r10
+    push 0x11 ; r11
+    push 0x12 ; r12
+    push 0x13 ; r13
+    push 0x14 ; r14
+    push 0x15 ; r15
+	mov rax,rsp ; el RSP
+	mov rsp,r8 ; restauro el RSP
+	ret
+
+forceProcessChange:
+	mov rsp, rdi
+	popState
+	iretq
+
+forceScheduler:
+	int 20h 
+	ret
 
 
 SECTION .bss
