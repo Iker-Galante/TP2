@@ -4,6 +4,9 @@ GLOBAL clock
 GLOBAL inb
 GLOBAL outb
 
+
+GLOBAL criticalRegion
+
 section .text
 	
 cpuVendor:
@@ -80,4 +83,10 @@ outb:
 	out dx, al
 	mov rsp, rbp
 	pop rbp
+	ret
+
+criticalRegion: ;Me deberia devolver 1 si entro correctamente
+	mov eax,1
+	xchg eax, [rdi]
+	dec eax
 	ret
