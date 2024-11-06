@@ -1,10 +1,12 @@
 #!/bin/bash
-
-# Set audio device variable
-if [ "$(uname)" == "Darwin" ]; then
-    audio="coreaudio"
+# Para debuggear, ejecutar con el argumento -d
+if(($#==1))
+then
+    if [ $1 == "-d" ]
+    then
+    echo "Debuggeando..."
+    qemu-system-x86_64 -hda Image/x64BareBonesImage.qcow2 -m 512 -device intel-hda -device hda-output -d -S -s
+    fi
 else
-    audio="pa"
+    qemu-system-x86_64 -hda Image/x64BareBonesImage.qcow2 -m 512 -device intel-hda -device hda-output
 fi
-
-qemu-system-x86_64 -hda Image/x64BareBonesImage.qcow2 -m 512 -audiodev $audio,id=audio0 -soundhw pcspk
