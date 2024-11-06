@@ -2,9 +2,12 @@
 #include <process.h>
 #include <queue.h>
 #include <scheduler.h>
+#include <stdbool.h>
 
 #define MAX_SEMAPHORES       200
 #define FIRST_USER_SEMAPHORE 100
+#define TRUE 1
+#define FALSE 0
 
 typedef int sem_t;
 
@@ -12,9 +15,9 @@ typedef struct TSem {
 	char * name;
 	size_t value;
 	queueptr blockedProcesses;
-	bool activeProcesses[MAX_PROCESSES];  // Keeps track of the processes that have permission to access the semaphore
+	int activeProcesses[MAX_PROCESSES];  // Keeps track of the processes that have permission to access the semaphore
 	size_t activeProcessDim;
-	bool destroying;
+	int destroying; //Puede ser que no haga falta o lo cambio a int 
 } TSem;
 
 typedef struct TMutex {
