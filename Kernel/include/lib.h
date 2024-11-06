@@ -17,4 +17,8 @@ uint64_t *createStack(uint64_t *stackStart, void *function, char **args);
 void forceScheduler();
 void forceProcessChange();
 
+unsigned int strlen(char * str); //Para poder reservar espacio en memoria de cierta longitud
+void strcpy(char * dest, char * src); //Para poder copiar strings
+int strcmp(char * str1, char * str2); //Para poder comparar strings
+
 #endif
