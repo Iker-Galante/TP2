@@ -12,4 +12,9 @@ char *cpuVendor(char *result);
 void outb(int memoryMap, int output); 
 int inb(int memoryMap);
 
+/*Used for Stack creation*/
+uint64_t *createStack(uint64_t *stackStart, void *function, char **args);
+void forceScheduler();
+void forceProcessChange();
+
 #endif
